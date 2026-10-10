@@ -1,0 +1,62 @@
+{
+  "version": "1.0.0",
+  "status": "development_baseline",
+  "date": "2026-10-10",
+  "reference_decisions": "../09-视觉参考与风格评审.md",
+  "specification": "../10-视觉设计规范.md",
+  "color": {
+    "background": "#242536",
+    "background_deep": "#1B1D2A",
+    "surface": "#EEE3D7",
+    "surface_raised": "#F7F0E5",
+    "surface_subtle": "#E3D6C9",
+    "text": "#302E36",
+    "text_muted": "#625860",
+    "text_inverse": "#F1E7D9",
+    "text_inverse_muted": "#CBBEC9",
+    "primary": "#4B6353",
+    "primary_hover": "#3F5446",
+    "accent": "#D2B685",
+    "success": "#426047",
+    "pending": "#785924",
+    "danger": "#8B454B",
+    "info": "#405E74",
+    "border": "#C4B3A8",
+    "border_inverse": "#6E6373",
+    "focus": "#8F622C",
+    "focus_inverse": "#D2B685"
+  },
+  "chart": {
+    "learning": "#3F6267",
+    "income": "#4B6353",
+    "spending": "#705477",
+    "penalty": "#99494D"
+  },
+  "font": {
+    "body": "'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif",
+    "display": "'Noto Serif SC', 'Songti SC', 'SimSun', serif",
+    "numeric": "'IBM Plex Mono', Consolas, monospace",
+    "size_px": {"caption": 12, "label": 14, "body": 16, "card_title": 20, "section_title": 28, "page_title": 36},
+    "line_height": {"body": 1.65, "heading": 1.35, "reading": 1.85}
+  },
+  "space_px": [4, 8, 12, 16, 24, 32, 48, 64],
+  "radius_px": {"control": 10, "card": 18, "dialog": 24, "badge": 6},
+  "layout_px": {"header_height": 64, "navigation_width": 216, "agent_width": 336, "content_max_width": 1600, "desktop_gap": 24, "mobile_gap": 16, "touch_min": 44},
+  "breakpoint_px": {"mobile_max": 760, "compact_max": 1100},
+  "motion_ms": {"hover": 140, "panel": 220, "task_unlock": 420, "world_growth": 600, "reduced": 0},
+  "world": {"projection": "isometric_2_to_1", "tile_art_width_px": 128, "tile_art_height_px": 64, "light_direction": "upper_left", "sampling": "nearest_neighbor", "asset_layers": ["ground", "paths", "structures", "plants", "companions", "lighting", "state_markers"]},
+  "contrast_checks": [
+    {"foreground": "color.text", "background": "color.surface", "minimum": 4.5},
+    {"foreground": "color.text_muted", "background": "color.surface", "minimum": 4.5},
+    {"foreground": "color.text_inverse", "background": "color.background", "minimum": 4.5},
+    {"foreground": "color.text_inverse_muted", "background": "color.background", "minimum": 4.5},
+    {"foreground": "color.text_inverse", "background": "color.primary", "minimum": 4.5},
+    {"foreground": "color.text", "background": "color.accent", "minimum": 4.5},
+    {"foreground": "color.success", "background": "color.surface", "minimum": 4.5},
+    {"foreground": "color.pending", "background": "color.surface", "minimum": 4.5},
+    {"foreground": "color.danger", "background": "color.surface", "minimum": 4.5},
+    {"foreground": "color.info", "background": "color.surface", "minimum": 4.5},
+    {"foreground": "color.focus", "background": "color.surface", "minimum": 3},
+    {"foreground": "color.focus_inverse", "background": "color.background", "minimum": 3}
+  ]
+}

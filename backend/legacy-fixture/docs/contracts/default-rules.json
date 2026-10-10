@@ -1,0 +1,150 @@
+{
+  "version": "2026-10-10.2",
+  "timezone": "Asia/Shanghai",
+  "day_boundary": "00:00",
+  "scoring": {
+    "coins_per_learning_point": 1,
+    "difficulty_percent": {"light": 80, "standard": 100, "hard": 125, "extreme": 150},
+    "breakthrough_bonus": {"none": 0, "clear": 10, "major": 25},
+    "templates": {
+      "english_review": {"base": 10, "max": 40, "verification": "recall_and_correction"},
+      "math_review": {"base": 20, "max": 60, "verification": "independent_solution"},
+      "new_knowledge": {"base": 50, "max": 100, "verification": "explain_and_apply"},
+      "deep_challenge": {"base": 80, "max": 150, "verification": "agreed_milestones"},
+      "deliberate_practice": {"base": 30, "max": 80, "verification": "agreed_problem_set"},
+      "productive_attempt": {"base": 5, "max": 15, "verification": "concrete_progress"},
+      "scheduled_review": {"base": 10, "max": 10, "verification": "independent_delayed_recall"},
+      "flashcard": {"base": 10, "max": 10, "verification": "answer_before_reveal"}
+    },
+    "micro_review_daily_cap": 100,
+    "productive_attempt_daily_cap": 30,
+    "productive_progress_step_points": 5,
+    "productive_progress_steps_max": 2,
+    "max_rewarded_card_occurrences_per_day": 1,
+    "forward_timer_points": 0,
+    "downward_correction_coin_policy": "keep_already_issued_as_compensation",
+    "upward_correction_coin_policy": "difference_above_source_high_water"
+  },
+  "review": {
+    "interval_days": [1, 3, 7, 14, 30, 60],
+    "again_delay_minutes": 10,
+    "hard_interval_percent": 50,
+    "minimum_day_interval": 1,
+    "round_size": 10,
+    "new_cards_per_round_max": 3,
+    "consolidation_min_delayed_passes": 2,
+    "consolidation_min_first_gap_hours": 24,
+    "consolidation_min_latest_gap_days": 7
+  },
+  "world": {
+    "level_step_points": 200,
+    "chapter_landmark_consolidated_percent": 80,
+    "plant_stage_count": 3,
+    "passive_coin_generation": false,
+    "daily_companion_affinity_gain": 1,
+    "companion_interaction_mints_points": false,
+    "milestone_coin_rewards": {"first_verified_learning": 20, "first_consolidated_point": 30, "first_chapter_landmark": 50}
+  },
+  "checkin": {
+    "window_start": "06:45",
+    "window_end_exclusive": "07:15",
+    "requires_startup_answer": true,
+    "base_coins": 5,
+    "streak_increment_coins": 1,
+    "max_daily_coins": 10,
+    "default_miss_penalty_coins": 10,
+    "penalty_requires_enabled_plan": true,
+    "rest_day_keeps_streak": true
+  },
+  "habits": {
+    "default_daily_reward_coins": 5,
+    "default_miss_penalty_coins": 10,
+    "max_total_daily_penalty_coins": 30,
+    "same_day_retroactive_penalty_changes": false
+  },
+  "screen_time": {
+    "input_method": "manual",
+    "default_scope": "entertainment",
+    "default_leisure_policy": "exclude_redeemed_used",
+    "unit": "minutes",
+    "default_limit_minutes": 30,
+    "max_input_minutes": 1440,
+    "success_reward_coins": 20,
+    "default_failure_penalty_coins": 10,
+    "penalty_requires_enabled_plan": true,
+    "record_deadline_next_day": "12:00",
+    "missing_record_result": "unknown",
+    "unknown_mints_or_deducts": false,
+    "latest_confirmed_revision_wins": true
+  },
+  "commitments": {
+    "default_target_learning_points": 500,
+    "default_stake_coins": 500,
+    "default_success_bonus_coins": 800,
+    "max_stake_coins": 500,
+    "max_success_bonus_coins": 800,
+    "max_acceptances_per_local_day": 1,
+    "max_active": 1,
+    "counting_scope": "new_verified_learning_after_acceptance",
+    "default_deadline": "next_local_midnight",
+    "pending_assessment_grace_hours": 24,
+    "missing_system_evidence_result": "void_and_refund"
+  },
+  "catalog": [
+    {"code": "seed_basic", "kind": "seed", "price_coins": 10},
+    {"code": "decoration_basic", "kind": "decoration", "price_coins": 100},
+    {"code": "building_upgrade", "kind": "upgrade", "price_coins": 250},
+    {"code": "companion_outfit", "kind": "outfit", "price_coins": 150},
+    {"code": "generated_image", "kind": "image", "price_coins": 300},
+    {"code": "story_chapter", "kind": "chapter", "price_coins": 200},
+    {"code": "harvest_collectible", "kind": "collectible", "price_coins": 0, "purchasable": false}
+  ],
+  "generation": {
+    "max_images_per_day": 2,
+    "max_story_chapters_per_day": 3,
+    "story_chapter_target_characters": 1500,
+    "max_concurrent_per_provider": 2,
+    "text_timeout_seconds": 90,
+    "image_timeout_seconds": 180,
+    "retry_ambiguous_paid_requests_automatically": false
+  },
+  "leisure_rewards": {
+    "max_running_per_account": 1,
+    "allow_parallel_study_timer": false,
+    "expires_after_days": null,
+    "refund_policy": "full_before_first_start",
+    "charge_policy": "hold_on_redeem_spend_on_first_start",
+    "unused_time_policy": "keep_after_pause",
+    "automatic_overtime_penalty": false,
+    "max_duration_minutes": 1440,
+    "max_price_coins": 10000,
+    "custom_default_duration_minutes": 30,
+    "custom_default_price_coins": 30,
+    "presets": [
+      {"code": "leisure_anime", "name": "动漫时光", "duration_minutes": 120, "price_coins": 120, "screen_usage": "entertainment"},
+      {"code": "leisure_manga", "name": "漫画时光", "duration_minutes": 120, "price_coins": 120, "screen_usage": "entertainment"},
+      {"code": "leisure_ai_project", "name": "自由折腾 AI 项目", "duration_minutes": 60, "price_coins": 60, "screen_usage": "entertainment"},
+      {"code": "leisure_novel", "name": "小说时光", "duration_minutes": 120, "price_coins": 120, "screen_usage": "entertainment"},
+      {"code": "leisure_browse", "name": "聊天记录、论坛与帖子", "duration_minutes": 30, "price_coins": 30, "screen_usage": "entertainment"}
+    ]
+  },
+  "agent": {
+    "max_tool_rounds_per_turn": 6,
+    "max_verification_questions_per_activity": 2,
+    "allowed_difficulty_reassessment": "with_evidence_via_assessment_revision",
+    "allow_direct_balance_mutation": false,
+    "allow_shell_or_arbitrary_http_tools": false
+  },
+  "jobs": {
+    "lease_seconds": 60,
+    "heartbeat_seconds": 15,
+    "max_safe_attempts": 3,
+    "retry_delays_seconds": [5, 30, 120]
+  },
+  "storage": {
+    "max_upload_bytes": 20971520,
+    "max_pdf_pages": 200,
+    "backup_keep_count": 7,
+    "backup_local_time": "03:00"
+  }
+}

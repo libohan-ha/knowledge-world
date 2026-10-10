@@ -1,0 +1,32 @@
+{
+  "version": "system-core-art-2026-10-10.1",
+  "status": "runtime_review_in_progress",
+  "format": "Procedural Three.js BufferGeometry, authored in this React application",
+  "runtime_delivery": "Vite production chunks. No runtime model CDN or remote texture requests.",
+  "ownership": "Original project-specific procedural models and pixel texture; no Tiny Glade, Octopia or CozySpace commercial assets copied.",
+  "reference_use": "H/K/E references informed composition, light, material and UI direction only.",
+  "licence_notes": "/world-art/threejs/README.md",
+  "tokens": "docs/contracts/design-tokens.json",
+  "sources": [
+    "frontend/src/features/world/sculpture.ts",
+    "frontend/src/features/world/models.ts",
+    "frontend/src/features/world/game-models.ts",
+    "frontend/src/features/world/enemy-models.ts",
+    "frontend/src/features/world/GameEffects.tsx",
+    "frontend/src/features/world/BattleEffects.tsx"
+  ],
+  "entries": [
+    {"id":"camp_hall","description":"Three silhouettes: gabled home, side wing and balcony, then lookout tower and courtyard; side and rear windows/door/stairs.","models":["home:camp_hall:1","home:camp_hall:2","home:camp_hall:3"]},
+    {"id":"home_decor","description":"Six local decorations with independent purpose and geometry.","models":["decor:lantern","decor:flower_bed","decor:reading_bench","decor:stone_well","decor:stargazing_deck","decor:companion_den"]},
+    {"id":"hero","code":"hero","visual_stages":3,"poses":["idle","walk","attack","cast","hit","defeat","victory","rest"],"growth":"Clothing, backpack, weapon and armour silhouette; exact level/stats remain server-owned."},
+    {"id":"companions","codes":["moss_bear","shadow_wolf","star_fox"],"visual_stages":3,"poses":["idle","walk","attack","cast","hit","defeat","victory","rest"],"growth":"Distinct quadruped silhouettes with growing rock armour, shadow fur or star ornaments."},
+    {"id":"enemies","codes":["bramble","boar","wisp","forest_boss","ice_guard","ice_wolf","snow_oracle","frost_boss","ruin_guard","ruin_mage","ruin_oracle","ruin_boss"],"visual_stages":1,"poses":["idle","walk","attack","cast","hit","defeat","victory","rest"],"note":"Enemy stages 2/3 resolve compatibly to the same catalogue shape; they are not counted as additional art variants."},
+    {"id":"expedition_sites","description":"Camp and boss structures for forest, frost ridge and ruins, each with hostile and occupied flags/lights.","models":["outpost:mist_forest:camp:hostile","outpost:mist_forest:camp:occupied","outpost:mist_forest:boss:hostile","outpost:mist_forest:boss:occupied","outpost:frost_ridge:camp:hostile","outpost:frost_ridge:camp:occupied","outpost:frost_ridge:boss:hostile","outpost:frost_ridge:boss:occupied","outpost:ancient_ruins:camp:hostile","outpost:ancient_ruins:camp:occupied","outpost:ancient_ruins:boss:hostile","outpost:ancient_ruins:boss:occupied"]},
+    {"id":"trophies","models":["trophy:mist_forest","trophy:frost_ridge","trophy:ancient_ruins"]},
+    {"id":"leisure_room","description":"Volumetric cutaway room with floor boards, bookcase, books, sofa, armchair, rug, table and warm floor lamp.","models":["room:reading"]},
+    {"id":"scenery","description":"Layered broadleaf trees, pine, bridge and lantern. Connected terrain, creek, path, grass tufts and shore stones are built from visible cells.","models":["tree","tree:1","pine","lamp","bridge"]},
+    {"id":"legacy_preservation","description":"Existing owned buildings, plants and companion retain local model support. These shapes are not evidence of new gameplay.","models":["camp","garden","plant:0","plant:1","plant:2","fox:idle:false","fox:idle:true","building:forest:0:1","building:forest:0:2","building:forest:0:3","building:forest:1:1","building:forest:1:2","building:forest:1:3","building:forest:2:1","building:forest:2:2","building:forest:2:3"]}
+  ],
+  "material": {"texture":"Deterministic 64 × 64 RGBA pixel grain; width read from tokens at runtime.","sampling":"Nearest mag, nearest mipmap min; no JPEG or external bitmap.","geometry_sharing":"Lazy compilation per model key; instanced scenery and matching objects share buffers; reference-counted disposal on route exit."},
+  "validation": {"geometry":"artifacts/art/system-core/asset-audit.json", "runtime":"artifacts/art/system-core/", "note":"Consult actual runtime and SC reports. Manifest completeness is not visual or performance acceptance."}
+}

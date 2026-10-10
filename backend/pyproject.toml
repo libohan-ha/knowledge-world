@@ -1,0 +1,31 @@
+[project]
+name = "knowledge-world"
+version = "0.1.0"
+description = "知识世界：有证据的学习、可追溯的成长"
+requires-python = ">=3.12"
+dependencies = [
+  "fastapi>=0.115", "uvicorn>=0.34", "sqlalchemy>=2.0", "alembic>=1.15",
+  "pydantic>=2.10", "httpx>=0.28", "argon2-cffi>=23.1", "python-multipart>=0.0.20",
+  "pillow>=11", "keyring>=25", "itsdangerous>=2.2", "tzdata>=2025.1"
+]
+
+[dependency-groups]
+dev = ["pytest>=8.3", "pytest-cov>=6", "ruff>=0.11"]
+
+[project.scripts]
+knowledge-world = "knowledge_world.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.ruff]
+line-length = 110
+extend-exclude = ["src/knowledge_world/vendor"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]

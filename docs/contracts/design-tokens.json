@@ -1,0 +1,427 @@
+{
+  "version": "2.1.0",
+  "status": "system_core_visual_implementation_in_progress",
+  "date": "2026-10-10",
+  "reference_decisions": "../09-视觉参考与风格评审.md",
+  "specification": "../10-视觉设计规范.md",
+  "color": {
+    "background": "#242536",
+    "background_deep": "#1B1D2A",
+    "surface": "#EEE3D7",
+    "surface_raised": "#F7F0E5",
+    "surface_subtle": "#E3D6C9",
+    "text": "#302E36",
+    "text_muted": "#625860",
+    "text_inverse": "#F1E7D9",
+    "text_inverse_muted": "#CBBEC9",
+    "primary": "#4B6353",
+    "primary_hover": "#3F5446",
+    "accent": "#D2B685",
+    "success": "#426047",
+    "pending": "#785924",
+    "danger": "#8B454B",
+    "info": "#405E74",
+    "border": "#C4B3A8",
+    "border_inverse": "#6E6373",
+    "focus": "#8F622C",
+    "focus_inverse": "#D2B685"
+  },
+  "chart": {
+    "learning": "#3F6267",
+    "income": "#4B6353",
+    "spending": "#705477",
+    "penalty": "#99494D"
+  },
+  "font": {
+    "body": "'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif",
+    "display": "'Noto Serif SC', 'Songti SC', 'SimSun', serif",
+    "numeric": "'IBM Plex Mono', Consolas, monospace",
+    "size_px": {
+      "caption": 12,
+      "label": 14,
+      "body": 16,
+      "card_title": 20,
+      "section_title": 28,
+      "page_title": 36
+    },
+    "line_height": {
+      "body": 1.65,
+      "heading": 1.35,
+      "reading": 1.85
+    }
+  },
+  "space_px": [
+    4,
+    8,
+    12,
+    16,
+    24,
+    32,
+    48,
+    64
+  ],
+  "radius_px": {
+    "control": 10,
+    "card": 18,
+    "dialog": 24,
+    "badge": 6
+  },
+  "layout_px": {
+    "header_height": 64,
+    "navigation_width": 216,
+    "agent_width": 336,
+    "content_max_width": 1600,
+    "desktop_gap": 24,
+    "mobile_gap": 16,
+    "touch_min": 44
+  },
+  "breakpoint_px": {
+    "mobile_max": 760,
+    "compact_max": 1100
+  },
+  "motion_ms": {
+    "hover": 140,
+    "panel": 220,
+    "task_unlock": 420,
+    "world_growth": 600,
+    "camera_focus": 600,
+    "fog_reveal": 900,
+    "building_growth": 1400,
+    "landmark_reveal": 2800,
+    "harvest": 700,
+    "reward_flight": 700,
+    "companion_reaction": 900,
+    "leisure_enter": 900,
+    "history_transition": 1000,
+    "system_result": 650,
+    "checkin": 600,
+    "wager_result": 1200,
+    "reward_reveal": 900,
+    "summon": 2600,
+    "training": 1600,
+    "battle_action": 720,
+    "battle_impact": 180,
+    "battle_result": 1800,
+    "occupation": 2800,
+    "home_growth": 1400,
+    "reduced": 0
+  },
+  "world": {
+    "renderer": "threejs",
+    "react_integration": "react-three-fiber",
+    "projection": "orthographic_3d",
+    "default_composition": "isometric_2_5d",
+    "world_units_per_grid_cell": 1,
+    "texels_per_world_unit": 64,
+    "tile_art_width_px": 128,
+    "tile_art_height_px": 64,
+    "legacy_tile_dimensions_usage": "viewport_and_placement_conversion_only",
+    "light_direction": "upper_left_at_default_camera",
+    "sampling": "nearest_neighbor_for_pixel_textures",
+    "asset_layers": [
+      "ground",
+      "paths",
+      "structures",
+      "plants",
+      "companions",
+      "lighting",
+      "state_markers"
+    ],
+    "camera": {
+      "azimuth_deg": 45,
+      "elevation_deg": 30,
+      "min_elevation_deg": 20,
+      "max_elevation_deg": 65,
+      "horizontal_orbit_deg": 360,
+      "default_zoom": 1,
+      "min_zoom": 0.35,
+      "max_zoom": 3
+    },
+    "assets": {
+      "building_variants_per_theme": 3,
+      "building_stages_from": "system-core-rules.target.json#/home/max_building_level",
+      "hero_stages_from": "system-core-rules.target.json#/hero/visual_stage_min_levels",
+      "monster_stages_from": "system-core-rules.target.json#/monsters/visual_stage_min_levels",
+      "legacy_plant_stages_from": "default-rules.json#/world/plant_stage_count",
+      "landmark_models_per_theme": 1
+    },
+    "scene_palette": {
+      "sky_night": "#242D39",
+      "sky_day": "#B6C9C2",
+      "fog_night": "#435663",
+      "fog_day": "#AFBDB1",
+      "grass": [
+        "#718560",
+        "#84936B",
+        "#667D5A"
+      ],
+      "soil": "#6D6350",
+      "cliff": "#90917D",
+      "stone": "#B1AD96",
+      "path": "#C0AE88",
+      "water": "#5D9399",
+      "water_highlight": "#ADD8CF",
+      "trunk": "#685840",
+      "foliage": [
+        "#668465",
+        "#879B70",
+        "#4C6D59",
+        "#ADB37C"
+      ],
+      "flower": [
+        "#E6D7A1",
+        "#ADABC7",
+        "#CF997F"
+      ],
+      "wall": "#E4D7B7",
+      "wall_shade": "#BFB598",
+      "timber": "#635544",
+      "wood": "#A98B64",
+      "metal": "#535E58",
+      "roof_forest": "#65877A",
+      "roof_valley": "#718892",
+      "roof_plaza": "#A17064",
+      "roof_neutral": "#7F8392",
+      "window": "#FFE1A1",
+      "window_day": "#93B8B1",
+      "window_frame": "#695D46",
+      "flag": "#D2B685",
+      "fox": "#C89A68",
+      "fox_light": "#F0DFC1",
+      "fox_dark": "#685643",
+      "scarf": "#758F80",
+      "selection": "#F6E4B8",
+      "exploration": "#C4CF99",
+      "unknown": "#667C82",
+      "hero_skin": "#D8B996",
+      "hero_hair": "#574E48",
+      "hero_cloak": "#557667",
+      "armor": "#819997",
+      "wolf": "#64717E",
+      "wolf_light": "#A3B2BA",
+      "star_fox": "#D8CBB6",
+      "magic": "#B7D9DF",
+      "heal": "#C3D7AA",
+      "hostile_flag": "#A7726D",
+      "snow": "#C6D6D0"
+    },
+    "geometry": {
+      "base_radius_cells": 4,
+      "base_thickness": 0.42,
+      "terrain_step": 0.025,
+      "tile_bevel": 0.055,
+      "building_footprint": 0.64,
+      "building_base_height": 0.46,
+      "building_stage_height": 0.13,
+      "landmark_scale": 1.16,
+      "companion_scale": 0.42,
+      "tree_scale": 1.1,
+      "camera_radius": 18,
+      "camera_world_height": 7.5,
+      "preview_world_height": 2.4,
+      "room_preview_world_height": 3.5,
+      "preview_look_height": 0.35,
+      "river_x": -3.5,
+      "river_width": 0.46,
+      "river_meander": 0.18,
+      "river_bank_width": 0.14,
+      "river_level": -0.035,
+      "path_width": 0.24,
+      "terrain_subdivisions": 4,
+      "preview_radius_cells": 1,
+      "texture_pixel_levels": 8,
+      "max_scene_cells": 500,
+      "manual_rotate_step_deg": 45,
+      "manual_elevation_step_deg": 10,
+      "selection_line_width": 0.025,
+      "viewport_save_debounce_ms": 900,
+      "click_drag_threshold_px": 8,
+      "diagnostic_interval_ms": 1000,
+      "unit_scale": 0.62,
+      "unit_showcase_scale": 1.2,
+      "outpost_scale": 1.35,
+      "decor_scale": 1,
+      "home_building_scale": 1.65,
+      "trophy_scale": 1.3,
+      "tree_cluster_offset": 0.22,
+      "tree_min_scale": 0.8,
+      "tree_scale_variation": 0.3,
+      "scenery_clearance": 1.15,
+      "grass_tufts_per_cell": 5,
+      "shore_stones_per_cell": 4,
+      "effect_ring_radius": 0.68,
+      "effect_particle_count": 24,
+      "effect_particle_height": 1.35,
+      "battle_spacing": 1.35,
+      "battle_team_distance": 3.6,
+      "battle_lunge": 0.65
+    },
+    "lighting": {
+      "key_position": [
+        -6,
+        10,
+        6
+      ],
+      "key_color_night": "#C4D8E1",
+      "key_color_day": "#FFF0D3",
+      "key_intensity_night": 1.7,
+      "key_intensity_day": 3.0,
+      "ambient_intensity_night": 1.1,
+      "ambient_intensity_day": 1.8,
+      "ambient_sky": "#B0C8D0",
+      "ambient_ground": "#897D60",
+      "window_emissive_night": 1.8,
+      "window_emissive_day": 0.18,
+      "warm_light_intensity": 3,
+      "warm_light_distance": 4,
+      "shadow_bias": -0.0004,
+      "shadow_normal_bias": 0.02,
+      "shadow_radius": 3,
+      "shadow_extent": 12,
+      "shadow_near": 0.5,
+      "shadow_far": 40,
+      "fog_near": 20,
+      "fog_far": 42,
+      "exposure": 1.08,
+      "environment_cycle_seconds": 8,
+      "water_cycle_seconds": 12,
+      "particle_size": 0.025,
+      "sound_gain": 0.04,
+      "sound_seconds": 0.3,
+      "sound_frequencies": [
+        523.25,
+        659.25,
+        783.99
+      ],
+      "bloom_strength": 0.25,
+      "bloom_radius": 0.45,
+      "bloom_threshold": 1.1
+    },
+    "presentation": {
+      "max_parallel_major_sequences": 1,
+      "max_auto_replay_on_return": 1,
+      "seen_event_limit": 500,
+      "cue_poll_ms": 80,
+      "battle_impact_ratio": 0.48,
+      "battle_recovery_ratio": 0.74,
+      "battle_replay_speeds": [
+        0.5,
+        1,
+        2,
+        4
+      ],
+      "landmark_cues_ms": {
+        "focus": 0,
+        "fog": 400,
+        "build": 700,
+        "lights": 1600,
+        "companion": 1900,
+        "receipt": 2200
+      },
+      "auto_camera_outside_world": false,
+      "skip_keeps_authoritative_final_state": true
+    },
+    "quality_profiles": {
+      "desktop": {
+        "max_dpr": 1.5,
+        "shadow_map_size": 2048,
+        "shadow_casting_lights": 1,
+        "ambient_particles_max": 120,
+        "bloom": true
+      },
+      "mobile": {
+        "max_dpr": 1,
+        "shadow_map_size": 1024,
+        "shadow_casting_lights": 1,
+        "ambient_particles_max": 40,
+        "bloom": false
+      },
+      "low": {
+        "max_dpr": 1,
+        "shadow_map_size": 0,
+        "shadow_casting_lights": 0,
+        "ambient_particles_max": 0,
+        "bloom": false
+      }
+    },
+    "performance_targets": {
+      "desktop_fps_target": 60,
+      "mobile_fps_target": 30,
+      "desktop_p95_frame_ms_max": 25,
+      "mobile_p95_frame_ms_max": 40,
+      "sample_seconds": 30,
+      "warmup_seconds": 5,
+      "world_first_interactive_ms_max": 3000,
+      "initial_world_assets_bytes_max": 8388608,
+      "visible_world_objects": 150,
+      "route_roundtrips": 10
+    },
+    "audio": {
+      "default_enabled": false,
+      "max_simultaneous_effects": 3,
+      "background_music_required": false
+    }
+  },
+  "contrast_checks": [
+    {
+      "foreground": "color.text",
+      "background": "color.surface",
+      "minimum": 4.5
+    },
+    {
+      "foreground": "color.text_muted",
+      "background": "color.surface",
+      "minimum": 4.5
+    },
+    {
+      "foreground": "color.text_inverse",
+      "background": "color.background",
+      "minimum": 4.5
+    },
+    {
+      "foreground": "color.text_inverse_muted",
+      "background": "color.background",
+      "minimum": 4.5
+    },
+    {
+      "foreground": "color.text_inverse",
+      "background": "color.primary",
+      "minimum": 4.5
+    },
+    {
+      "foreground": "color.text",
+      "background": "color.accent",
+      "minimum": 4.5
+    },
+    {
+      "foreground": "color.success",
+      "background": "color.surface",
+      "minimum": 4.5
+    },
+    {
+      "foreground": "color.pending",
+      "background": "color.surface",
+      "minimum": 4.5
+    },
+    {
+      "foreground": "color.danger",
+      "background": "color.surface",
+      "minimum": 4.5
+    },
+    {
+      "foreground": "color.info",
+      "background": "color.surface",
+      "minimum": 4.5
+    },
+    {
+      "foreground": "color.focus",
+      "background": "color.surface",
+      "minimum": 3
+    },
+    {
+      "foreground": "color.focus_inverse",
+      "background": "color.background",
+      "minimum": 3
+    }
+  ]
+}

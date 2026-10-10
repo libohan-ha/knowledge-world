@@ -1,0 +1,571 @@
+{
+  "projection": "isometric_2_to_1",
+  "tile_size": [
+    128,
+    64
+  ],
+  "light_direction": "upper_left",
+  "sampling": "nearest_neighbor",
+  "assets": [
+    {
+      "id": "grass-0",
+      "type": "terrain",
+      "size": [
+        128,
+        88
+      ],
+      "anchor": [
+        64,
+        32
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "stage": null,
+      "source": "scripts/build-assets.py — original procedural pixel drawing",
+      "license": "Project-owned original artwork",
+      "version": "1.0.0"
+    },
+    {
+      "id": "grass-1",
+      "type": "terrain",
+      "size": [
+        128,
+        88
+      ],
+      "anchor": [
+        64,
+        32
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "stage": null,
+      "source": "scripts/build-assets.py — original procedural pixel drawing",
+      "license": "Project-owned original artwork",
+      "version": "1.0.0"
+    },
+    {
+      "id": "grass-2",
+      "type": "terrain",
+      "size": [
+        128,
+        88
+      ],
+      "anchor": [
+        64,
+        32
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "stage": null,
+      "source": "scripts/build-assets.py — original procedural pixel drawing",
+      "license": "Project-owned original artwork",
+      "version": "1.0.0"
+    },
+    {
+      "id": "path",
+      "type": "path",
+      "size": [
+        128,
+        88
+      ],
+      "anchor": [
+        64,
+        32
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "stage": null,
+      "source": "scripts/build-assets.py — original procedural pixel drawing",
+      "license": "Project-owned original artwork",
+      "version": "1.0.0"
+    },
+    {
+      "id": "stone",
+      "type": "path",
+      "size": [
+        128,
+        88
+      ],
+      "anchor": [
+        64,
+        32
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "stage": null,
+      "source": "scripts/build-assets.py — original procedural pixel drawing",
+      "license": "Project-owned original artwork",
+      "version": "1.0.0"
+    },
+    {
+      "id": "river",
+      "type": "terrain",
+      "size": [
+        128,
+        88
+      ],
+      "anchor": [
+        64,
+        32
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "stage": null,
+      "source": "scripts/build-assets.py — original procedural pixel drawing",
+      "license": "Project-owned original artwork",
+      "version": "1.0.0"
+    },
+    {
+      "id": "tree",
+      "type": "plant",
+      "size": [
+        112,
+        142
+      ],
+      "anchor": [
+        56,
+        125
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "stage": null,
+      "source": "scripts/build-assets.py — original procedural pixel drawing",
+      "license": "Project-owned original artwork",
+      "version": "1.0.0"
+    },
+    {
+      "id": "pine",
+      "type": "plant",
+      "size": [
+        112,
+        142
+      ],
+      "anchor": [
+        56,
+        125
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "stage": null,
+      "source": "scripts/build-assets.py — original procedural pixel drawing",
+      "license": "Project-owned original artwork",
+      "version": "1.0.0"
+    },
+    {
+      "id": "camp",
+      "type": "structure",
+      "size": [
+        160,
+        180
+      ],
+      "anchor": [
+        80,
+        146
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "stage": 0,
+      "source": "scripts/build-assets.py — original procedural pixel drawing",
+      "license": "Project-owned original artwork",
+      "version": "1.0.0"
+    },
+    {
+      "id": "forest-1",
+      "type": "structure",
+      "size": [
+        160,
+        180
+      ],
+      "anchor": [
+        80,
+        146
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "stage": 1,
+      "source": "scripts/build-assets.py — original procedural pixel drawing",
+      "license": "Project-owned original artwork",
+      "version": "1.0.0"
+    },
+    {
+      "id": "forest-2",
+      "type": "structure",
+      "size": [
+        160,
+        180
+      ],
+      "anchor": [
+        80,
+        146
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "stage": 2,
+      "source": "scripts/build-assets.py — original procedural pixel drawing",
+      "license": "Project-owned original artwork",
+      "version": "1.0.0"
+    },
+    {
+      "id": "forest-3",
+      "type": "structure",
+      "size": [
+        160,
+        180
+      ],
+      "anchor": [
+        80,
+        146
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "stage": 3,
+      "source": "scripts/build-assets.py — original procedural pixel drawing",
+      "license": "Project-owned original artwork",
+      "version": "1.0.0"
+    },
+    {
+      "id": "valley-1",
+      "type": "structure",
+      "size": [
+        160,
+        180
+      ],
+      "anchor": [
+        80,
+        146
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "stage": 1,
+      "source": "scripts/build-assets.py — original procedural pixel drawing",
+      "license": "Project-owned original artwork",
+      "version": "1.0.0"
+    },
+    {
+      "id": "valley-2",
+      "type": "structure",
+      "size": [
+        160,
+        180
+      ],
+      "anchor": [
+        80,
+        146
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "stage": 2,
+      "source": "scripts/build-assets.py — original procedural pixel drawing",
+      "license": "Project-owned original artwork",
+      "version": "1.0.0"
+    },
+    {
+      "id": "valley-3",
+      "type": "structure",
+      "size": [
+        160,
+        180
+      ],
+      "anchor": [
+        80,
+        146
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "stage": 3,
+      "source": "scripts/build-assets.py — original procedural pixel drawing",
+      "license": "Project-owned original artwork",
+      "version": "1.0.0"
+    },
+    {
+      "id": "plaza-1",
+      "type": "structure",
+      "size": [
+        160,
+        180
+      ],
+      "anchor": [
+        80,
+        146
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "stage": 1,
+      "source": "scripts/build-assets.py — original procedural pixel drawing",
+      "license": "Project-owned original artwork",
+      "version": "1.0.0"
+    },
+    {
+      "id": "plaza-2",
+      "type": "structure",
+      "size": [
+        160,
+        180
+      ],
+      "anchor": [
+        80,
+        146
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "stage": 2,
+      "source": "scripts/build-assets.py — original procedural pixel drawing",
+      "license": "Project-owned original artwork",
+      "version": "1.0.0"
+    },
+    {
+      "id": "plaza-3",
+      "type": "structure",
+      "size": [
+        160,
+        180
+      ],
+      "anchor": [
+        80,
+        146
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "stage": 3,
+      "source": "scripts/build-assets.py — original procedural pixel drawing",
+      "license": "Project-owned original artwork",
+      "version": "1.0.0"
+    },
+    {
+      "id": "crop-0",
+      "type": "plant",
+      "size": [
+        84,
+        88
+      ],
+      "anchor": [
+        42,
+        66
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "stage": 0,
+      "source": "scripts/build-assets.py — original procedural pixel drawing",
+      "license": "Project-owned original artwork",
+      "version": "1.0.0"
+    },
+    {
+      "id": "crop-1",
+      "type": "plant",
+      "size": [
+        84,
+        88
+      ],
+      "anchor": [
+        42,
+        66
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "stage": 1,
+      "source": "scripts/build-assets.py — original procedural pixel drawing",
+      "license": "Project-owned original artwork",
+      "version": "1.0.0"
+    },
+    {
+      "id": "crop-2",
+      "type": "plant",
+      "size": [
+        84,
+        88
+      ],
+      "anchor": [
+        42,
+        66
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "stage": 2,
+      "source": "scripts/build-assets.py — original procedural pixel drawing",
+      "license": "Project-owned original artwork",
+      "version": "1.0.0"
+    },
+    {
+      "id": "fox-idle",
+      "type": "companion",
+      "size": [
+        64,
+        66
+      ],
+      "anchor": [
+        32,
+        55
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "stage": null,
+      "source": "scripts/build-assets.py — original procedural pixel drawing",
+      "license": "Project-owned original artwork",
+      "version": "1.0.0"
+    },
+    {
+      "id": "fox-happy",
+      "type": "companion",
+      "size": [
+        64,
+        66
+      ],
+      "anchor": [
+        32,
+        55
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "stage": null,
+      "source": "scripts/build-assets.py — original procedural pixel drawing",
+      "license": "Project-owned original artwork",
+      "version": "1.0.0"
+    },
+    {
+      "id": "fox-scarf",
+      "type": "companion",
+      "size": [
+        64,
+        66
+      ],
+      "anchor": [
+        32,
+        55
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "stage": null,
+      "source": "scripts/build-assets.py — original procedural pixel drawing",
+      "license": "Project-owned original artwork",
+      "version": "1.0.0"
+    },
+    {
+      "id": "lamp",
+      "type": "decoration",
+      "size": [
+        56,
+        112
+      ],
+      "anchor": [
+        28,
+        93
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "stage": null,
+      "source": "scripts/build-assets.py — original procedural pixel drawing",
+      "license": "Project-owned original artwork",
+      "version": "1.0.0"
+    },
+    {
+      "id": "bridge",
+      "type": "structure",
+      "size": [
+        128,
+        96
+      ],
+      "anchor": [
+        64,
+        42
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "stage": null,
+      "source": "scripts/build-assets.py — original procedural pixel drawing",
+      "license": "Project-owned original artwork",
+      "version": "1.0.0"
+    },
+    {
+      "id": "garden-upgrade",
+      "type": "upgrade",
+      "size": [
+        64,
+        88
+      ],
+      "anchor": [
+        16,
+        74
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "stage": null,
+      "source": "scripts/build-assets.py — original procedural pixel drawing",
+      "license": "Project-owned original artwork",
+      "version": "1.0.0"
+    },
+    {
+      "id": "flower-collectible",
+      "type": "collectible",
+      "size": [
+        84,
+        88
+      ],
+      "anchor": [
+        42,
+        80
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "stage": null,
+      "source": "scripts/build-assets.py — original procedural pixel drawing",
+      "license": "Project-owned original artwork",
+      "version": "1.0.0"
+    }
+  ]
+}
