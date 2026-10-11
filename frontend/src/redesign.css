@@ -1,0 +1,123 @@
+/* ===== Knowledge World · visual prototype v2 =====
+   Dark-first game UI: panels sit in the night, parchment is retired,
+   gold = currency/progress, green = action. */
+:root{
+  --background:#1F2132;
+  --background-deep:#171826;
+  --surface:#2A2C40;
+  --surface-raised:#323550;
+  --surface-subtle:#24263A;
+  --text:#F1E7D9;
+  --text-muted:#A9A0B4;
+  --text-inverse:#F1E7D9;
+  --text-inverse-muted:#A9A0B4;
+  --border:#3E4160;
+  --border-inverse:#3E4160;
+  --primary:#5F8A6B;
+  --primary-hover:#6F9C7B;
+  --accent:#E2C38A;
+  --info:#7FA6C6;
+  --pending:#D9A55B;
+  --danger:#D27A80;
+  --focus:#E2C38A;
+  --glow-gold:0 0 0 1px #E2C38A33,0 8px 30px #E2C38A14;
+  --card-bg:linear-gradient(180deg,#2D3046 0%,#26283B 100%);
+  --card-edge:1px solid #E2C38A1F;
+  --card-shadow:inset 0 1px 0 #FFFFFF0A,0 12px 32px #0000004D;
+}
+body{background:radial-gradient(1200px 600px at 70% -10%,#2B2F4A 0%,transparent 60%),var(--background)}
+.app-shell{background:transparent}
+
+/* ---------- surfaces ---------- */
+.panel,.core-card,.game-art-panel,.catalog-card,.reward-card,.story-card,.agent-panel.full{
+  background:var(--card-bg)!important;border:var(--card-edge)!important;box-shadow:var(--card-shadow)!important;color:var(--text)}
+.core-card .core-card{background:#FFFFFF08!important;box-shadow:none!important}
+input,textarea,select{background:#1B1D2C!important;color:var(--text)!important;border:1px solid var(--border)!important}
+input:focus,textarea:focus,select:focus{border-color:var(--accent)!important;outline:none;box-shadow:0 0 0 3px #E2C38A26}
+.notice{background:#FFFFFF08!important;color:var(--text)}
+
+/* ---------- navigation ---------- */
+.navigation{background:linear-gradient(180deg,#191A29,#151622)!important;border-right:1px solid #FFFFFF0D!important}
+.navigation nav a{color:var(--text-muted)!important;background:transparent!important;border:0!important;position:relative;padding-left:var(--space-16)!important}
+.navigation nav a:hover{background:#FFFFFF08!important;color:var(--text)!important}
+.navigation nav a.active{background:linear-gradient(90deg,#E2C38A1F,transparent)!important;color:var(--accent)!important;box-shadow:none!important}
+.navigation nav a.active:before{content:'';position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:3px;background:var(--accent);box-shadow:0 0 12px var(--accent)}
+.brand-mark{color:var(--accent)}
+
+/* ---------- top bar & currency ---------- */
+.topbar{background:#171826CC;backdrop-filter:blur(10px);border-bottom:1px solid #FFFFFF0D!important}
+.balance-pill{background:linear-gradient(180deg,#E2C38A1A,#E2C38A0A);border:1px solid #E2C38A55!important;color:var(--accent)!important;border-radius:999px!important;font-weight:500;box-shadow:0 0 18px #E2C38A14}
+.balance-pill svg{filter:drop-shadow(0 0 4px #E2C38A88)}
+
+/* ---------- page titles: quieter eyebrow, bolder headline ---------- */
+.page-title .eyebrow,.eyebrow,.game-eyebrow{color:var(--accent)!important;opacity:.7;letter-spacing:.24em;font-size:11px}
+.page-title h1{font-size:32px;letter-spacing:.02em}
+.page-title p{color:var(--text-muted)}
+
+/* ---------- tabs: underline style instead of beige pills ---------- */
+.core-tabs,.tabs.dark{border:0!important;background:transparent!important;padding:0!important;gap:var(--space-24)!important;border-bottom:1px solid #FFFFFF14!important;width:100%!important;border-radius:0!important}
+.core-tabs>button,.core-tabs>a,.tabs.dark button{background:transparent!important;color:var(--text-muted)!important;border:0!important;border-radius:0!important;padding:var(--space-12) 0!important;position:relative;font-size:15px!important}
+.core-tabs>button.active,.core-tabs>a.active,.tabs.dark button.active{color:var(--text)!important}
+.core-tabs>button.active:after,.core-tabs>a.active:after,.tabs.dark button.active:after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--accent);box-shadow:0 0 10px var(--accent)}
+
+/* ---------- buttons ---------- */
+.button{background:linear-gradient(180deg,#6A9576,#557D61)!important;color:#F6F1E6!important;border:1px solid #7FAA8A55!important;box-shadow:0 4px 14px #5F8A6B33,inset 0 1px 0 #FFFFFF22;font-weight:500}
+.button:hover:not(:disabled){filter:brightness(1.08)}
+.button.secondary,.button.quiet,.button.light{background:transparent!important;box-shadow:none!important;color:var(--text)!important;border:1px solid var(--border)!important}
+.button.secondary:hover:not(:disabled){border-color:var(--accent)!important;color:var(--accent)!important}
+.button.quiet{border-color:transparent!important;color:var(--text-muted)!important}
+.button:disabled{opacity:1!important;background:transparent!important;border:1px dashed #FFFFFF2E!important;color:#8D8698!important;box-shadow:none!important;filter:none}
+.text-link,.text-button{color:var(--accent)!important}
+
+/* ---------- reward shop: compact horizontal tiles ---------- */
+.reward-catalog{grid-template-columns:repeat(auto-fill,minmax(340px,1fr))!important;gap:var(--space-16)!important}
+.reward-card{display:grid!important;grid-template-columns:64px 1fr;grid-template-areas:"icon title" "icon desc" "meta meta" "act act";column-gap:var(--space-16);padding:var(--space-20,20px)!important;transition:transform .2s,border-color .2s}
+.reward-card:hover{transform:translateY(-2px);border-color:#E2C38A55!important}
+.reward-emblem{grid-area:icon;height:64px!important;width:64px;margin:0!important;border-radius:16px!important;background:#FFFFFF0A!important;position:relative}
+.reward-emblem:before,.reward-emblem:after,.reward-emblem>span{display:none!important}
+.reward-emblem>svg{width:30px!important;height:30px!important;stroke-width:1.6!important}
+.reward-emblem.leisure_anime{color:#E58FA4;background:#E58FA414!important;box-shadow:inset 0 0 0 1px #E58FA433}
+.reward-emblem.leisure_ai_project{color:#7FA6C6;background:#7FA6C614!important;box-shadow:inset 0 0 0 1px #7FA6C633}
+.reward-emblem.leisure_browse{color:#9FD0A8;background:#9FD0A814!important;box-shadow:inset 0 0 0 1px #9FD0A833}
+.reward-emblem.leisure_novel{color:#B39DDB;background:#B39DDB14!important;box-shadow:inset 0 0 0 1px #B39DDB33}
+.reward-emblem.leisure_manga{color:#E2C38A;background:#E2C38A14!important;box-shadow:inset 0 0 0 1px #E2C38A33}
+.reward-card>h2{grid-area:title;margin:2px 0 4px!important;font-size:18px!important}
+.reward-card>p{grid-area:desc;margin:0!important;font-size:13px!important;line-height:1.6!important;color:var(--text-muted)!important}
+.reward-meta{grid-area:meta;margin:var(--space-16) 0 var(--space-12)!important;padding-top:var(--space-12);border-top:1px solid #FFFFFF0F}
+.reward-meta>strong{color:var(--accent)!important;font-size:16px!important}
+.reward-meta>strong:before{content:'◆ ';font-size:11px;vertical-align:1px}
+.reward-card .core-actions{grid-area:act;padding-top:0!important}
+
+/* ---------- system chat ---------- */
+.agent-panel{background:transparent}
+.agent-panel.full>select{margin:var(--space-12) var(--space-16) 0!important;width:auto!important;max-width:calc(100% - 32px);font-size:13px;padding:6px 10px;border-radius:999px!important}
+.agent-heading{border-bottom:1px solid #FFFFFF0F!important}
+.system-avatar{background:radial-gradient(circle,#E2C38A33,transparent 70%)!important;color:var(--accent)!important}
+.agent-welcome{padding:var(--space-12) 0!important}
+.agent-welcome h3{margin-top:var(--space-8)!important;font-size:22px!important}
+.tiny-stars{color:var(--accent)}
+.conversation-prompts button{background:#FFFFFF08!important;border:1px solid var(--border)!important;color:var(--text)!important}
+.conversation-prompts button:hover{border-color:var(--accent)!important}
+.agent-composer{border-top:1px solid #FFFFFF0F!important}
+.agent-config-note a{color:var(--accent)}
+
+/* ---------- roster / unit showcase ---------- */
+.unit-combat-stats dd{color:var(--accent)}
+.unit-skill{background:#7FA6C614!important;border:1px solid #7FA6C633!important}
+.game-state-pill{border-color:#E2C38A55!important;color:var(--accent)!important}
+.species-price{color:var(--accent)!important}
+.team-position{border-color:var(--accent)!important;color:var(--accent)!important}
+
+/* ---------- welcome ---------- */
+.welcome-page{background:radial-gradient(900px 500px at 25% 80%,#2E4A3A55,transparent 60%),radial-gradient(900px 600px at 80% 10%,#2B2F4A,transparent 60%),var(--background-deep)!important}
+.welcome-illustration.v2{height:auto!important;margin-top:var(--space-32)}
+.welcome-illustration.v2 img{position:static!important;width:min(520px,100%);image-rendering:auto!important;border-radius:20px;-webkit-mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,#000 55%,transparent 100%);mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,#000 55%,transparent 100%);filter:drop-shadow(0 20px 40px #0008)}
+.welcome-form{background:#24263AE6!important;border:var(--card-edge)!important;box-shadow:0 30px 80px #0007,var(--glow-gold)!important;backdrop-filter:blur(12px)}
+.welcome-form h2{color:var(--text)}
+.welcome-form label,.welcome-form .field>span{color:var(--text)}
+.navigation img,.companion-card>img{image-rendering:auto!important;border-radius:12px}
+
+button:disabled:not(.button){opacity:.3!important}
+.dev-banner,[class*=banner]{color:#2A2416!important}
+.agent-panel.full{height:auto!important;min-height:0!important}
+.agent-panel.full .agent-messages{overflow:visible!important}
