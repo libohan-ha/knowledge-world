@@ -119,5 +119,7 @@ input:focus,textarea:focus,select:focus{border-color:var(--accent)!important;out
 
 button:disabled:not(.button){opacity:.3!important}
 .dev-banner,[class*=banner]{color:#2A2416!important}
-.agent-panel.full{height:auto!important;min-height:0!important}
-.agent-panel.full .agent-messages{overflow:visible!important}
+/* Keep the responsive panel height from style.css. Only messages scroll;
+   the heading, thread picker and composer must not shrink into each other. */
+.agent-panel.full>.agent-heading,.agent-panel.full>select,.agent-panel.full>.agent-composer{flex-shrink:0}
+.agent-panel.full .agent-messages{min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
