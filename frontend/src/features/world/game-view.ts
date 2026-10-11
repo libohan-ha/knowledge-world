@@ -14,8 +14,8 @@ export type GameEvent = components['schemas']['HistoryEvent']
 export type Battle = components['schemas']['Battle']
 export type Ticket = components['schemas']['LeisureTicket']
 const G = tokens.world.geometry
-export const roleLabels: Record<string,string> = {hero:'旅人',tank:'守护',damage:'输出',dps:'输出',support:'支援',enemy:'敌方'}
-export const skillLabels: Record<string,string> = {ember_bolt:'星火术',stone_guard:'岩甲守护',starlight_heal:'星光治愈',shadow_strike:'暗影突袭',physical_damage:'物理攻击',magic_damage:'法术攻击',shield:'护盾',heal:'治疗',attack:'普通攻击'}
+export const roleLabels: Record<string,string> = {hero:'旅人',tank:'守护',damage:'输出',dps:'输出',support:'支援',guard:'守护',enemy:'敌方'}
+export const skillLabels: Record<string,string> = {ember_bolt:'星火术',stone_guard:'岩甲守护',starlight_heal:'星光治愈',shadow_strike:'暗影突袭',physical_damage:'物理攻击',magic_damage:'法术攻击',shield:'护盾',heal:'治疗',attack:'普通攻击',arcane_strike:'奥术冲击'}
 export const gameStateLabels: Record<string,string> = {reserved:'已预留',running:'休息中',paused:'已暂停',completed:'已完成',cancelled:'已退回',proposed:'待接受',active:'进行中',won:'达成约定',lost:'本次未达成',voided:'押金已退回',settled:'已记录',queued:'等待战报',resolved:'战报已保存',needs_review:'待核对',available:'可以出发',locked:'前路待开启',occupied:'已占领'}
 
 export function unitModel(unit: Pick<Unit,'code'|'visual_stage'>, pose: UnitPose = 'idle') {
