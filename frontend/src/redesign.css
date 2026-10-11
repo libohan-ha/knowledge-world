@@ -123,3 +123,29 @@ button:disabled:not(.button){opacity:.3!important}
    the heading, thread picker and composer must not shrink into each other. */
 .agent-panel.full>.agent-heading,.agent-panel.full>select,.agent-panel.full>.agent-composer{flex-shrink:0}
 .agent-panel.full .agent-messages{min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
+
+/* Quiet, rounded scroll handles belong to the dark conversation surface. */
+:root,.agent-messages{
+  color-scheme:dark;
+  scrollbar-width:thin;
+  scrollbar-color:color-mix(in srgb,var(--text-muted) 40%,var(--surface)) transparent;
+}
+@supports selector(::-webkit-scrollbar){
+  :root,.agent-messages{scrollbar-width:auto;scrollbar-color:auto}
+  :root::-webkit-scrollbar,.agent-messages::-webkit-scrollbar{width:var(--space-8);height:var(--space-8)}
+  :root::-webkit-scrollbar-track,.agent-messages::-webkit-scrollbar-track{background:transparent;margin-block:var(--space-12)}
+  :root::-webkit-scrollbar-thumb,.agent-messages::-webkit-scrollbar-thumb{
+    background:color-mix(in srgb,var(--text-muted) 40%,transparent);
+    min-height:var(--space-24);
+    border:2px solid transparent;
+    border-radius:var(--radius-control);
+    background-clip:padding-box;
+  }
+  :root::-webkit-scrollbar-thumb:hover,.agent-messages::-webkit-scrollbar-thumb:hover{background-color:color-mix(in srgb,var(--text-muted) 70%,transparent)}
+  :root::-webkit-scrollbar-button,.agent-messages::-webkit-scrollbar-button{display:none;width:0;height:0}
+  :root::-webkit-scrollbar-corner,.agent-messages::-webkit-scrollbar-corner{background:transparent}
+}
+@media(forced-colors:active){
+  :root,.agent-messages{scrollbar-color:auto}
+  :root::-webkit-scrollbar-thumb,.agent-messages::-webkit-scrollbar-thumb{background:ButtonText}
+}
