@@ -149,3 +149,37 @@ button:disabled:not(.button){opacity:.3!important}
   :root,.agent-messages{scrollbar-color:auto}
   :root::-webkit-scrollbar-thumb,.agent-messages::-webkit-scrollbar-thumb{background:ButtonText}
 }
+
+/* The later CozySpace room retains its explicitly selected cream controls. */
+.cozy-room select{background:var(--cozy-cream)!important;color:var(--cozy-ink)!important;border-color:var(--cozy-button)!important}
+.cozy-room .cozy-radio select{background:transparent!important;border:0!important}
+.cozy-room input[type=range]{background:transparent!important;border:0!important;box-shadow:none!important}
+.cozy-room .leisure-actions .button{background:var(--cozy-button)!important;color:var(--cozy-cream)!important;border-color:transparent!important;box-shadow:none!important}
+.cozy-room .leisure-actions .button.quiet{background:transparent!important;color:var(--cozy-ink)!important}
+.cozy-room .game-state-pill,.cozy-room .game-eyebrow,.cozy-room .text-link{color:var(--cozy-ink)!important}
+.cozy-room .notice{background:var(--cozy-cream)!important;color:var(--cozy-ink)}
+
+/* Compact navigation and quieter card interiors retain the current palette. */
+.nav-collapse{align-self:flex-end;margin:var(--space-8) 0}
+@media(min-width:761px){
+  .app-shell.nav-collapsed{--nav-width:80px;grid-template-columns:80px minmax(0,1fr)}
+  .app-shell.nav-collapsed.with-agent{grid-template-columns:80px minmax(0,1fr) var(--agent-width)}
+  .nav-collapsed .navigation{padding:var(--space-16) var(--space-8)}
+  .nav-collapsed .brand>span:last-child,.nav-collapsed .nav-intro,.nav-collapsed .nav-section,.nav-collapsed nav a>span,.nav-collapsed .nav-bottom>div{display:none}
+  .nav-collapsed nav a{justify-content:center;padding:var(--space-12)}
+  .nav-collapsed .brand,.nav-collapsed .nav-bottom{justify-content:center}
+  .nav-collapsed .nav-collapse{align-self:center}
+}
+@media(max-width:760px){.nav-collapse{display:none}}
+.reward-card{grid-template-areas:"icon title" "icon desc" "meta meta" "act act" "more more"!important}
+.reward-card>h2{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.reward-description,.card-summary{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;overflow-wrap:anywhere}
+.reward-description{min-height:3.2em}
+.reward-card.is-expanded>h2{white-space:normal}
+.reward-card.is-expanded .reward-description{-webkit-line-clamp:unset;display:block}
+.reward-expand{grid-area:more;justify-self:start;font-size:var(--font-caption);margin-top:var(--space-8)}
+.reward-emblem{background:transparent!important;box-shadow:none!important;border:none!important;border-radius:50%!important}
+.commitment-terms,.decision-record,.agent-action{background:transparent!important;box-shadow:none!important;border:0!important;border-left:2px solid var(--border)!important;border-radius:0!important;padding:var(--space-12) var(--space-16)!important}
+.agent-action{margin:var(--space-16) 0}
+.fixed-task strong{color:var(--accent)}
+.fixed-task .core-actions{margin-top:var(--space-16)}

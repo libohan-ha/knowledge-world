@@ -24,6 +24,16 @@ def edit_reward(c, data, identity=None):
     return public(c.get("reward_catalog", identity))
 
 
+def disable_reward(c, identity, expected_version=None):
+    row = c.get("reward_catalog", identity)
+    if expected_version is not None:
+        check_version(row, expected_version)
+    require(row["enabled"], "REWARD_DISABLED", "奖励已经删除", 409)
+    c.update("reward_catalog", identity, enabled=0, version=row["version"] + 1, updated_at=c.now)
+    c.change("rewards")
+    return public(c.get("reward_catalog", identity))
+
+
 def used_ms(c, row):
     total = c.scalar("SELECT COALESCE(sum(COALESCE(ended_at,:now)-started_at),0) FROM leisure_intervals WHERE ticket_id=:id", {"id": row["id"], "now": c.now})
     return min(row["duration_seconds"] * 1000, max(0, total))

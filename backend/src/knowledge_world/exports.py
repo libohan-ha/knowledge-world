@@ -22,6 +22,8 @@ LEARNING_TABLES = {
     "timers": "timer_sessions",
 }
 ALL_TABLES = {
+    "fixed_tasks": "fixed_tasks",
+    "fixed_task_completions": "fixed_task_completions",
     "habits": "habit_plans",
     "habit_occurrences": "habit_occurrences",
     "screen_records": "screen_records",

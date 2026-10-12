@@ -42,6 +42,16 @@ def test_clean_setup_and_pydantic_transport(h):
     h.reconcile()
 
 
+def test_reward_can_be_removed_without_touching_issued_ticket(h):
+    h.fund(3)
+    reward = h.post("/rewards", {"name": "SYNTHETIC removable", "description": "", "price_points": 3, "duration_minutes": 1})
+    ticket, _ = buy(h, "leisure", reward["id"])
+    h.request("DELETE", f"/rewards/{reward['id']}", {"expected_version": reward["version"]})
+    assert all(item["id"] != reward["id"] for item in h.get("/rewards"))
+    assert h.get(f"/leisure/{ticket['entity_id']}")["snapshot"]["id"] == reward["id"]
+    h.request("POST", "/rewards/quotes", {"operation": "leisure", "target_id": reward["id"]}, status=409)
+
+
 def test_checkin_is_shared_single_source_and_rest_keeps_streak(h):
     h.clock.set("2026-10-10", "06:45")
     first = h.post("/system/checkin")

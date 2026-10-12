@@ -28,6 +28,11 @@ it('Ctrl+Enter inserts a newline without sending',async()=>{
   await user.type(input,'第一行');await user.keyboard('{Control>}{Enter}{/Control}');await user.type(input,'第二行')
   expect(input).toHaveValue('第一行\n第二行');expect(mocks.send).not.toHaveBeenCalled()
 })
+it('Shift+Enter inserts a newline without sending',async()=>{
+  const user=userEvent.setup(),input=composer()
+  await user.type(input,'第一行');await user.keyboard('{Shift>}{Enter}{/Shift}');await user.type(input,'第二行')
+  expect(input).toHaveValue('第一行\n第二行');expect(mocks.send).not.toHaveBeenCalled()
+})
 it.each([{isComposing:true},{keyCode:229}])('IME confirmation does not send (%j)',async native=>{
   const input=composer();fireEvent.change(input,{target:{value:'中文输入'}})
   await act(async()=>fireEvent.keyDown(input,{key:'Enter',...native}))

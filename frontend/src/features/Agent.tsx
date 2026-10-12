@@ -38,8 +38,8 @@ export function AgentPanel({full=false}:{full?:boolean}) {
     const list=messageList.current
     if(!list)return
     if(!thread.data?.messages?.length){list.scrollTop=0;return}
-    if(!document.activeElement?.matches('input,textarea,select'))list.scrollTop=list.scrollHeight
-  },[id,thread.data?.messages?.length])
+    list.scrollTop=list.scrollHeight
+  },[id,thread.data?.messages?.length,streamed,thread.data?.actions?.length])
   async function send(){if(!draft.trim()||active||command.isPending||submitting.current)return;submitting.current=true;setError(null);try{let identity=id;if(!identity){const created=await api<Schema<'AgentThread'>>('/system/threads','POST',{title:'与系统的对话',context:{}});identity=created.id;setThreadId(identity)}const key=localStorage.getItem(storage+':key')||crypto.randomUUID();localStorage.setItem(storage+':key',key);const result=await command.mutateAsync({path:'/system/threads/'+identity+'/messages',body:{content:draft,client_message_id:key},key});if(result.state==='needs_configuration')setError(new Error(result.message||'消息已保存，配置 AI 后可继续本次运行。'));setDraft('');localStorage.removeItem(storage);localStorage.removeItem(storage+':key')}catch(e){setError(e)}finally{submitting.current=false}}
   function editDraft(value:string){setDraft(value);localStorage.setItem(storage,value);localStorage.removeItem(storage+':key')}
   async function fresh(){try{const row=await api<Schema<'AgentThread'>>('/system/threads','POST',{title:'新的系统对话',context:{}});setThreadId(row.id);void queryClient.invalidateQueries()}catch(e){setError(e)}}
@@ -55,9 +55,9 @@ export function AgentPanel({full=false}:{full?:boolean}) {
       if(e.key!=='Enter'||e.nativeEvent.isComposing||e.nativeEvent.keyCode===229)return
       e.preventDefault()
       if(e.repeat)return
-      if(e.ctrlKey){const input=e.currentTarget;input.setRangeText('\n',input.selectionStart,input.selectionEnd,'end');editDraft(input.value)}
+      if(e.ctrlKey||e.shiftKey){const input=e.currentTarget;input.setRangeText('\n',input.selectionStart,input.selectionEnd,'end');editDraft(input.value)}
       else void send()
-    }}/><div><small>{isTest?'明确标记的测试适配器':'正式回执后，积分才算到账'}<br/>Enter 发送 · Ctrl+Enter 换行</small><Button type="submit" busy={command.isPending} disabled={!draft.trim()||!!active} aria-label="发送消息"><ArrowUp size={18}/></Button></div></form>
+    }}/><div><small>{isTest?'明确标记的测试适配器':'正式回执后，积分才算到账'}<br/>Enter 发送 · Shift / Ctrl+Enter 换行</small><Button type="submit" busy={command.isPending} disabled={!draft.trim()||!!active} aria-label="发送消息"><ArrowUp size={18}/></Button></div></form>
     {confirm&&<Modal title="核对具体条款" onClose={()=>setConfirm(null)}><div className="form"><ToolTerms card={confirm}/><Button busy={confirmCommand.isPending} onClick={async()=>{try{await confirmCommand.mutateAsync({path:'/system/actions/'+confirm.id+'/confirm',body:{action_hash:confirm.action_hash}});setConfirm(null)}catch{}}}>确认{confirm.tool_name==='abandon_wager'?'放弃并消费押金':confirm.tool_name==='propose_quote'?'此次兑换或培养':'接受条款'}</Button><ErrorNotice error={confirmCommand.error}/></div></Modal>}
   </div>
 }
