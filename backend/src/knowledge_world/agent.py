@@ -197,6 +197,25 @@ def thread_detail(c, identity):
         "SELECT tc.* FROM agent_tool_calls tc JOIN agent_runs r ON r.id=tc.run_id WHERE r.thread_id=:id AND tc.state='proposed' ORDER BY tc.created_at",
         {"id": identity},
     )
+    pending, seen = [], set()
+    for call in calls:
+        result = json.loads(call['result_json'] or '{}')
+        name = call['tool_name']
+        table = 'system_challenges' if name == 'propose_challenge' else 'commitments' if name in {'propose_wager', 'accept_wager', 'abandon_wager'} else None
+        if table and result.get('id'):
+            entity = c.get(table, result['id'])
+            allowed = {'active', 'pending_settlement'} if name == 'abandon_wager' else {'proposed'}
+            if entity['state'] not in allowed:
+                continue
+        if name == 'propose_quote' and result.get('expires_at'):
+            from datetime import datetime
+            if datetime.fromisoformat(result['expires_at']).timestamp() * 1000 <= c.now:
+                continue
+        key = (name, result.get('id') or result.get('quote_id') or digest(call['result_json'] or '{}'))
+        if key not in seen:
+            seen.add(key)
+            pending.append(call)
+    calls = pending
     return {
         **public(row),
         "messages": [public(m) for m in messages],

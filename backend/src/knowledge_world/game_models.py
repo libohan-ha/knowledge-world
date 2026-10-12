@@ -10,6 +10,35 @@ class PointsWallet(BaseModel):
     version: int
 
 
+class FixedTaskEdit(Input):
+    title: Name
+    description: str = Field(default='', max_length=4000)
+    reward_points: StrictInt = Field(ge=0, le=200)
+    expected_version: Count | None = None
+
+
+class FixedTask(BaseModel):
+    id: str
+    title: str
+    description: str
+    reward_points: int
+    version: int
+
+
+class FixedTaskComplete(Input):
+    completion_id: str = Field(min_length=8, max_length=128)
+
+
+class FixedTaskReceipt(BaseModel):
+    completion_id: str
+    task_id: str
+    title: str
+    awarded_points: int
+    ledger_entry_ids: list[str]
+    game_event_ids: list[str]
+    wallet: PointsWallet
+
+
 class Stats(BaseModel):
     hp: int
     physical_attack: int

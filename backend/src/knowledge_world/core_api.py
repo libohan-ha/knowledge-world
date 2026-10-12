@@ -7,6 +7,28 @@ from .game_events import wallet_view, history
 
 
 def register(router, C, response, paginate):
+    from . import fixed_tasks
+
+    @router.get('/system/fixed-tasks', response_model=m.Envelope[list[g.FixedTask]])
+    def fixed_task_list(c=C):
+        return response(c, fixed_tasks.catalog(c))
+
+    @router.post('/system/fixed-tasks', response_model=m.Envelope[g.FixedTask])
+    def fixed_task_create(data: g.FixedTaskEdit, c=C):
+        return response(c, fixed_tasks.save(c, data), 201)
+
+    @router.patch('/system/fixed-tasks/{identity}', response_model=m.Envelope[g.FixedTask])
+    def fixed_task_edit(identity: str, data: g.FixedTaskEdit, c=C):
+        return response(c, fixed_tasks.save(c, data, identity))
+
+    @router.delete('/system/fixed-tasks/{identity}', response_model=m.Envelope[g.FixedTask])
+    def fixed_task_delete(identity: str, data: m.Expected, c=C):
+        return response(c, fixed_tasks.disable(c, identity, data.expected_version))
+
+    @router.post('/system/fixed-tasks/{identity}/complete', response_model=m.Envelope[g.FixedTaskReceipt])
+    def fixed_task_complete(identity: str, data: g.FixedTaskComplete, c=C):
+        return response(c, fixed_tasks.complete(c, identity, data.completion_id))
+
     @router.get("/wallet", response_model=m.Envelope[g.PointsWallet])
     def wallet(c=C):
         return response(c, wallet_view(c))
@@ -34,7 +56,7 @@ def register(router, C, response, paginate):
         row = c.get("ledger_entries", identity)
         table = {"activity": "activities", "system_action": "system_actions", "habit_occurrence": "habit_occurrences",
             "commitment": "commitments", "game_order": "game_orders", "leisure": "leisure_tickets", "battle": "battles",
-            "redemption": "redemptions", "achievement": "achievement_grants"}.get(row["origin_type"])
+            "redemption": "redemptions", "achievement": "achievement_grants", "fixed_task": "fixed_tasks"}.get(row["origin_type"])
         source = c.one(f"SELECT * FROM {table} WHERE id=:id", {"id": row["origin_id"]}) if table else None
         require(source is None or source.get("owner_id", c.owner) == c.owner, "RESOURCE_NOT_FOUND", "来源不存在", 404)
         if source and table == "redemptions":
@@ -114,6 +136,10 @@ def register(router, C, response, paginate):
     @router.patch("/rewards/{identity}", response_model=m.Envelope[g.Reward])
     def reward_edit(identity: str, data: g.RewardEdit, c=C):
         return response(c, leisure.edit_reward(c, data, identity))
+
+    @router.delete("/rewards/{identity}", response_model=m.Envelope[g.Reward])
+    def reward_delete(identity: str, data: m.Expected | None = None, c=C):
+        return response(c, leisure.disable_reward(c, identity, data.expected_version if data else None))
 
     @router.post("/rewards/quotes", response_model=m.Envelope[g.QuoteResult])
     def reward_quote(data: g.GameQuote, c=C):

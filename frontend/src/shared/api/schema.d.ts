@@ -723,6 +723,59 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/system/fixed-tasks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fixed Task List */
+        get: operations["fixed_task_list_api_v1_system_fixed_tasks_get"];
+        put?: never;
+        /** Fixed Task Create */
+        post: operations["fixed_task_create_api_v1_system_fixed_tasks_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/system/fixed-tasks/{identity}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Fixed Task Delete */
+        delete: operations["fixed_task_delete_api_v1_system_fixed_tasks__identity__delete"];
+        options?: never;
+        head?: never;
+        /** Fixed Task Edit */
+        patch: operations["fixed_task_edit_api_v1_system_fixed_tasks__identity__patch"];
+        trace?: never;
+    };
+    "/api/v1/system/fixed-tasks/{identity}/complete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Fixed Task Complete */
+        post: operations["fixed_task_complete_api_v1_system_fixed_tasks__identity__complete_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/wallet": {
         parameters: {
             query?: never;
@@ -1057,7 +1110,8 @@ export interface paths {
         get?: never;
         put?: never;
         post?: never;
-        delete?: never;
+        /** Reward Delete */
+        delete: operations["reward_delete_api_v1_rewards__identity__delete"];
         options?: never;
         head?: never;
         /** Reward Edit */
@@ -2230,6 +2284,22 @@ export interface components {
                 [key: string]: unknown;
             };
         };
+        /** Envelope[FixedTaskReceipt] */
+        Envelope_FixedTaskReceipt_: {
+            data: components["schemas"]["FixedTaskReceipt"];
+            /** Meta */
+            meta?: {
+                [key: string]: unknown;
+            };
+        };
+        /** Envelope[FixedTask] */
+        Envelope_FixedTask_: {
+            data: components["schemas"]["FixedTask"];
+            /** Meta */
+            meta?: {
+                [key: string]: unknown;
+            };
+        };
         /** Envelope[HistoryPage] */
         Envelope_HistoryPage_: {
             data: components["schemas"]["HistoryPage"];
@@ -2502,6 +2572,15 @@ export interface components {
                 [key: string]: unknown;
             };
         };
+        /** Envelope[list[FixedTask]] */
+        Envelope_list_FixedTask__: {
+            /** Data */
+            data: components["schemas"]["FixedTask"][];
+            /** Meta */
+            meta?: {
+                [key: string]: unknown;
+            };
+        };
         /** Envelope[list[LegacyFactView]] */
         Envelope_list_LegacyFactView__: {
             /** Data */
@@ -2553,6 +2632,54 @@ export interface components {
         Expected: {
             /** Expected Version */
             expected_version: number;
+        };
+        /** FixedTask */
+        FixedTask: {
+            /** Id */
+            id: string;
+            /** Title */
+            title: string;
+            /** Description */
+            description: string;
+            /** Reward Points */
+            reward_points: number;
+            /** Version */
+            version: number;
+        };
+        /** FixedTaskComplete */
+        FixedTaskComplete: {
+            /** Completion Id */
+            completion_id: string;
+        };
+        /** FixedTaskEdit */
+        FixedTaskEdit: {
+            /** Title */
+            title: string;
+            /**
+             * Description
+             * @default
+             */
+            description: string;
+            /** Reward Points */
+            reward_points: number;
+            /** Expected Version */
+            expected_version?: number | null;
+        };
+        /** FixedTaskReceipt */
+        FixedTaskReceipt: {
+            /** Completion Id */
+            completion_id: string;
+            /** Task Id */
+            task_id: string;
+            /** Title */
+            title: string;
+            /** Awarded Points */
+            awarded_points: number;
+            /** Ledger Entry Ids */
+            ledger_entry_ids: string[];
+            /** Game Event Ids */
+            game_event_ids: string[];
+            wallet: components["schemas"]["PointsWallet"];
         };
         /** GameQuote */
         GameQuote: {
@@ -5092,6 +5219,164 @@ export interface operations {
             };
         };
     };
+    fixed_task_list_api_v1_system_fixed_tasks_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_list_FixedTask__"];
+                };
+            };
+        };
+    };
+    fixed_task_create_api_v1_system_fixed_tasks_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FixedTaskEdit"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_FixedTask_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    fixed_task_delete_api_v1_system_fixed_tasks__identity__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                identity: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Expected"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_FixedTask_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    fixed_task_edit_api_v1_system_fixed_tasks__identity__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                identity: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FixedTaskEdit"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_FixedTask_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    fixed_task_complete_api_v1_system_fixed_tasks__identity__complete_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                identity: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FixedTaskComplete"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_FixedTaskReceipt_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     wallet_api_v1_wallet_get: {
         parameters: {
             query?: never;
@@ -5659,6 +5944,41 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["RewardEdit"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_Reward_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    reward_delete_api_v1_rewards__identity__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                identity: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["Expected"] | null;
             };
         };
         responses: {
