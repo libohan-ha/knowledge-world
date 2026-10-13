@@ -290,3 +290,36 @@ input,textarea,select{background:#12131FB3!important;border-color:#FFFFFF1A!impo
 @media(prefers-reduced-transparency:reduce){
   .panel,.core-card,.game-art-panel,.catalog-card,.reward-card,.story-card,.agent-panel.full,.dialog,.agent-dock{background:var(--glass-effective,#272A3D)!important;-webkit-backdrop-filter:none;backdrop-filter:none}
 }
+
+/* ---------- reward cabin: entry, usage and the countdown ring ---------- */
+.cabin-entry{display:flex;align-items:center;gap:var(--space-16);margin:0 0 var(--space-24);padding:var(--space-16) var(--space-24);border-radius:var(--radius-card);border:1px solid #E2C38A3D;background:linear-gradient(100deg,#E2C38A1A,#2A2C40B8 55%);box-shadow:var(--card-shadow);-webkit-backdrop-filter:blur(var(--glass-blur));backdrop-filter:blur(var(--glass-blur));color:var(--text)}
+.cabin-entry:hover{border-color:#E2C38A66}
+.cabin-entry-icon{display:grid;place-items:center;width:48px;height:48px;border-radius:50%;background:#E2C38A1F;color:var(--accent);box-shadow:0 0 24px #E2C38A33}
+.cabin-entry.is-running .cabin-entry-icon{animation:cabin-glow 3.2s ease-in-out infinite}
+@keyframes cabin-glow{50%{box-shadow:0 0 36px #E2C38A55}}
+.cabin-entry-copy{flex:1;min-width:0;display:grid}.cabin-entry-copy small{color:var(--text-muted)}.cabin-entry-copy strong{font:500 var(--font-card-title)/1.4 var(--font-display);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cabin-pill{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 var(--space-12);border-radius:999px;border:1px solid #E2C38A40;background:#E2C38A12;color:var(--accent);font-size:var(--font-caption)}
+.cabin-pill small{font-family:var(--font-numeric);color:var(--text)}
+.leisure-usage{display:flex;flex-wrap:wrap;gap:var(--space-8) var(--space-24);margin:var(--space-12) 0;font-size:var(--font-caption);color:var(--text-muted)}
+.leisure-usage strong{color:var(--text);font:400 var(--font-label)/1.4 var(--font-numeric)}
+.cabin-timer{margin:var(--space-16) 0;padding:var(--space-12) var(--space-16);border-radius:var(--radius-control);background:#FFFFFF06;border:1px solid #FFFFFF10}
+.cabin-timer>summary{color:var(--accent)}
+.countdown{display:flex;align-items:center;gap:var(--space-24);flex-wrap:wrap;padding:var(--space-8) 0}
+.countdown-ring{position:relative;width:148px;height:148px;flex-shrink:0}
+.countdown-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.countdown-track{fill:none;stroke:#FFFFFF12;stroke-width:6}
+.countdown-progress{fill:none;stroke:var(--accent);stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset .3s linear;filter:drop-shadow(0 0 6px #E2C38A66)}
+.countdown[data-state=done] .countdown-progress{stroke:var(--success)}
+.countdown-readout{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.countdown-readout strong{font:400 26px/1.2 var(--font-numeric);letter-spacing:.02em}
+.countdown-readout small{color:var(--text-muted)}
+.countdown-controls{flex:1;min-width:220px;display:grid;gap:var(--space-12)}
+.countdown-presets{display:flex;flex-wrap:wrap;gap:var(--space-8);align-items:center}
+.countdown-presets button{min-height:34px;padding:0 var(--space-12);border-radius:999px;border:1px solid #FFFFFF1F;background:transparent;color:var(--text-muted);font-size:var(--font-caption)}
+.countdown-presets button.active,.countdown-presets button:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
+.countdown-minutes{display:inline-flex;align-items:center;gap:6px;font-size:var(--font-caption);color:var(--text-muted)}
+.countdown-minutes input{width:72px!important;min-height:34px!important;padding:0 var(--space-8)!important}
+.countdown-actions{display:flex;flex-wrap:wrap;gap:var(--space-8);align-items:center}
+.countdown-sound[aria-pressed=true]{color:var(--accent)}
+.countdown-done{margin:0;color:var(--success);font-size:var(--font-label)}
+@media(max-width:760px){.cabin-entry{padding:var(--space-12) var(--space-16)}.cabin-entry .button{padding:var(--space-8) var(--space-12)}.countdown-ring{width:120px;height:120px}.countdown-readout strong{font-size:22px}.cabin-pill span{display:none}}
