@@ -4,7 +4,11 @@ from .common import uid, dumps, require
 from .config import ROOT
 from .game_catalog import catalog
 
-TARGET = "system-core-2026-10-10.2"
+TARGET = "system-core-2026-10-13.1"
+# Keys a later target adds to an already activated rule set. A database on an
+# older (or user-published) version gets a NEW immutable version derived from
+# its own active payload, so customised caps survive and old rows stay intact.
+UPGRADES = {TARGET: ("scoring_mode", "tier_criteria", "tier_signals", "max_items_per_report", "calibration_days", "max_award_per_action_scope")}
 
 
 def activate(c):
@@ -18,11 +22,27 @@ def activate(c):
             c.execute("UPDATE rule_versions SET is_active=1 WHERE id=:v", {"v": TARGET})
         else:
             c.insert("rule_versions", id=TARGET, payload_json=dumps(imported), is_active=1, created_at=c.now)
+    upgrade(c)
     rules = c.rules()
     ensure_catalog(c, rules)
     for profile in c.all("SELECT id FROM profiles"):
         c.owner = profile["id"]
         initialize_account(c)
+
+
+def upgrade(c):
+    current = c.rules()
+    target = json.loads((ROOT / "docs/contracts/system-core-rules.target.json").read_text(encoding="utf-8"))
+    keys = UPGRADES.get(target["version"], ())
+    if not keys or all(key in current["system"] for key in keys):
+        return
+    derived = json.loads(dumps(current))
+    derived["system"].update({key: target["system"][key] for key in keys})
+    derived.update(version=target["version"], derived_from=current["version"])
+    if c.scalar("SELECT 1 FROM rule_versions WHERE id=:v", {"v": derived["version"]}):
+        derived["version"] = target["version"] + "." + uid()[:8]
+    c.execute("UPDATE rule_versions SET is_active=0 WHERE is_active=1")
+    c.insert("rule_versions", id=derived["version"], payload_json=dumps(derived), is_active=1, created_at=c.now)
 
 
 def ensure_catalog(c, rules):

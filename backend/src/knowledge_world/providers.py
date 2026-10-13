@@ -467,10 +467,23 @@ class FakeProvider:
             content = payload["action"]["content"]
             if "[测试：超时]" in content:
                 raise ProviderFailure("PROVIDER_RESULT_UNKNOWN", "测试适配器：模拟结果未知", ambiguous=True)
-            tier = "breakthrough" if "[测试：突破]" in content else "difficult" if "[测试：困难]" in content else "normal"
-            return {"points": payload["positive_tiers"][tier] if "[测试：" in content else 0,
+            def tier_of(text):
+                return "breakthrough" if "[测试：突破]" in text else "difficult" if "[测试：困难]" in text else "small" if "[测试：轻量]" in text else "normal"
+            tiers = payload["positive_tiers"]
+            if "[测试：分项]" in content:
+                # One item per non-empty line after the marker line; each line may carry its own tier marker.
+                lines = [line.strip() for line in content.split("[测试：分项]", 1)[1].splitlines() if line.strip()]
+                items = [{"name": line[:60], "tier": tier_of(line), "points": tiers[tier_of(line)], "reason": "【测试适配器】按标记定档"} for line in lines]
+                if "[测试：档外]" in content and items:
+                    items[0]["points"] += 7
+                return {"points": 0, "reason": "【测试适配器】仅校验分项结算协议，未执行真实语义判断。", "basis": "action",
+                    "status": "decided" if items else "no_action", "items": items}
+            tier = tier_of(content)
+            tagged = "[测试：" in content
+            return {"points": tiers[tier] if tagged else 0,
                 "reason": "【测试适配器】仅校验结算协议，未执行真实语义判断。", "basis": "action",
-                "status": "decided" if "[测试：" in content else "no_action"}
+                "status": "decided" if tagged else "no_action",
+                "items": [{"name": "整份汇报", "tier": tier, "points": tiers[tier], "reason": "【测试适配器】单项"}] if tagged else []}
 
         if payload.get("test_scenario") == "timeout":
             raise ProviderFailure("PROVIDER_RESULT_UNKNOWN", "测试适配器：模拟结果未知", ambiguous=True)

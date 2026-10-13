@@ -2142,10 +2142,33 @@ export interface components {
             model_info: {
                 [key: string]: unknown;
             };
+            /** Items */
+            items?: components["schemas"]["DecisionItem"][];
             /** Created At */
             created_at: string;
             /** Applied At */
             applied_at: string | null;
+        };
+        /** DecisionItem */
+        DecisionItem: {
+            /** Name */
+            name: string;
+            /** Tier */
+            tier: string;
+            /** Points */
+            points: number;
+            /**
+             * Reason
+             * @default
+             */
+            reason: string;
+            /**
+             * Basis
+             * @default action
+             */
+            basis: string;
+            /** Approved Points */
+            approved_points?: number | null;
         };
         /** DisplayPreferences */
         DisplayPreferences: {

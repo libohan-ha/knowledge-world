@@ -183,3 +183,15 @@ button:disabled:not(.button){opacity:.3!important}
 .agent-action{margin:var(--space-16) 0}
 .fixed-task strong{color:var(--accent)}
 .fixed-task .core-actions{margin-top:var(--space-16)}
+
+/* ---------- itemized judgment breakdown ---------- */
+.decision-items ul{list-style:none;margin:var(--space-8) 0 0;padding:0;display:grid;gap:var(--space-8)}
+.decision-items li{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;column-gap:var(--space-12);row-gap:var(--space-4);padding:var(--space-8) var(--space-12);border-radius:var(--radius-control);background:#FFFFFF06;border:1px solid #FFFFFF0D;font-size:var(--font-label)}
+.decision-items li>b{font:400 var(--font-label)/1.4 var(--font-numeric);color:var(--accent);min-width:3.5em;text-align:right}
+.decision-items li>small{grid-column:1/-1;color:var(--text-muted)}
+.decision-item-name{overflow-wrap:anywhere}
+.tier-chip{font-size:var(--font-caption);padding:1px var(--space-8);border-radius:999px;border:1px solid #FFFFFF1F;color:var(--text-muted);white-space:nowrap}
+.tier-difficult .tier-chip{color:var(--info);border-color:#7FA6C655}
+.tier-breakthrough .tier-chip{color:var(--accent);border-color:#E2C38A66;box-shadow:0 0 10px #E2C38A22}
+.tier-none{opacity:.7}
+.decision-items-total{margin:var(--space-8) 0 0!important;font-size:var(--font-caption)!important;color:var(--text-muted)}

@@ -35,7 +35,7 @@ DESCRIPTIONS = {
     "read_skills": "查询已安装的 Skill、当前可用状态和配置入口；拾忆/Shiyi 是外部只读 Skill，对赌也是 Skill",
     "read_system": "读取系统、钱包、任务与真实回执，不产生奖励",
     "record_action": "将本轮用户实际原话保存为唯一自述行动，只有实际行动才调用",
-    "propose_judgment": "建议该行动的净积分目标与理由，程序校验上限与依据后返回正式回执",
+    "propose_judgment": "按事项（items）建议该行动的积分：每个独立事项一个档位，分值必须等于档位值，程序求和并校验上限后返回正式回执",
     "checkin": "明确收到签到指令时执行今日签到，否则只读签到卡",
     "read_wagers": "查询对赌条款、进度、押金归属及结算历史",
     "propose_wager": "创建对赌条款卡；接受前不会冻结押金",
@@ -398,6 +398,7 @@ def run_turn(db, job):
         "本轮 Skill 状态：" + dumps(skills) + "。"
         "学习、工作、运动与项目都可成为行动。纯聊天、求助、查询本身没有奖励。"
         "record_action 保存本条用户原话，propose_judgment 只建议净积分目标，后端回执才决定实际金额。"
+        "一份汇报含多个独立事项时，在 propose_judgment.items 中逐项给档位（依据 rules.tier_criteria，以时长与题量为信号），每项分值等于 positive_tiers 中的档位值；程序按事项求和，不接受档位外的数字。"
         "引用回执中的实际积分、规则与来源；未收到成功回执不说已到账、已扣除或已完成购买。"
         "未知事实、离线和工具失败不构成失败或罚分。扣分必须引用已启用 rule:id 或已接受 challenge:id。"
         "每条消息最多归入一个行动；补充同一行动沿其 ID 修订，不另奖。自述只标为自述。"
