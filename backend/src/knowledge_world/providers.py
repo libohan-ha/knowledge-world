@@ -476,6 +476,10 @@ class FakeProvider:
                 items = [{"name": line[:60], "tier": tier_of(line), "points": tiers[tier_of(line)], "reason": "【测试适配器】按标记定档"} for line in lines]
                 if "[测试：档外]" in content and items:
                     items[0]["points"] += 7
+                if "[测试：违规]" in content and payload.get("penalty_rules"):
+                    rule = payload["penalty_rules"][0]
+                    items = [i for i in items if "[测试：违规]" not in i["name"]]
+                    items.append({"name": rule["title"], "tier": "penalty", "points": -rule["points"], "reason": "【测试适配器】原话标记承认违规", "basis": "rule:" + rule["id"]})
                 return {"points": 0, "reason": "【测试适配器】仅校验分项结算协议，未执行真实语义判断。", "basis": "action",
                     "status": "decided" if items else "no_action", "items": items}
             tier = tier_of(content)

@@ -293,6 +293,10 @@ def register(router, C, response, paginate):
     def penalty_enable(data: g.PenaltyRuleCreate, c=C):
         return response(c, system.penalty_rule(c, data))
 
+    @router.post("/system/penalty-rules/{identity}/violations", response_model=m.Envelope[g.Action])
+    def penalty_confess(identity: str, data: g.PenaltyConfession, c=C):
+        return response(c, system.confess(c, identity, data), 201)
+
     @router.delete("/system/penalty-rules/{identity}", response_model=m.Envelope[g.PenaltyRule])
     def penalty_disable(identity: str, c=C):
         c.get("system_penalty_rules", identity)

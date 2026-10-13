@@ -1583,6 +1583,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/system/penalty-rules/{identity}/violations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Penalty Confess */
+        post: operations["penalty_confess_api_v1_system_penalty_rules__identity__violations_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/system/penalty-rules/{identity}": {
         parameters: {
             query?: never;
@@ -3117,6 +3134,16 @@ export interface components {
             items: components["schemas"]["Wager"][];
             /** Next Cursor */
             next_cursor?: string | null;
+        };
+        /** PenaltyConfession */
+        PenaltyConfession: {
+            /** Client Key */
+            client_key: string;
+            /**
+             * Note
+             * @default
+             */
+            note: string;
         };
         /** PenaltyRule */
         PenaltyRule: {
@@ -7054,6 +7081,41 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Envelope_PenaltyRule_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    penalty_confess_api_v1_system_penalty_rules__identity__violations_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                identity: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PenaltyConfession"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_Action_"];
                 };
             };
             /** @description Validation Error */

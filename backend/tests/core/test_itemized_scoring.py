@@ -83,3 +83,57 @@ def test_activated_older_rules_get_a_new_derived_version(h):
         assert upgraded["version"] != old["version"] and upgraded["derived_from"] == old["version"]
         assert upgraded["system"]["daily_positive_action_cap"] == 777 and "tier_criteria" in upgraded["system"]
         assert json.loads(c.get("rule_versions", old["version"])["payload_json"]) == old
+
+
+def effective_rule(h, points=40):
+    rule = h.post("/system/penalty-rules", {"title": "SYNTHETIC 熬夜", "condition": "超过 1 点睡", "points": points})
+    h.clock.advance(days=1)
+    return rule
+
+
+def test_user_confession_applies_enabled_rule_once_within_caps(h):
+    h.fund(100)
+    pending = h.post("/system/penalty-rules", {"title": "SYNTHETIC 未生效", "condition": "明日起", "points": 30})
+    h.request("POST", f"/system/penalty-rules/{pending['id']}/violations", {"client_key": uid()}, status=403)
+    rule = effective_rule(h)
+    key = uid()
+    action = h.post(f"/system/penalty-rules/{rule['id']}/violations", {"client_key": key, "note": "SYNTHETIC 两点才睡"})
+    assert action["net_points"] == -40 and action["decisions"][-1]["items"][0]["tier"] == "penalty"
+    assert h.post(f"/system/penalty-rules/{rule['id']}/violations", {"client_key": key, "note": "SYNTHETIC 两点才睡"})["id"] == action["id"]
+    assert h.get("/wallet")["available_points"] == 60
+    h.request("DELETE", f"/system/penalty-rules/{rule['id']}")
+    h.request("POST", f"/system/penalty-rules/{rule['id']}/violations", {"client_key": uid()}, status=403)
+    h.reconcile()
+
+
+def test_confession_never_takes_more_than_available(h):
+    h.fund(15)
+    rule = effective_rule(h)
+    action = h.post(f"/system/penalty-rules/{rule['id']}/violations", {"client_key": uid()})
+    assert action["net_points"] == -15 and h.get("/wallet")["available_points"] == 0
+    h.reconcile()
+
+
+def test_judge_splits_admitted_violation_into_its_own_penalty_record(h):
+    h.fund(50)
+    effective_rule(h)
+    action = report(h, "[测试：分项]\n数学2小时 [测试：困难]\n昨晚两点才睡 [测试：违规]")
+    assert action["net_points"] == 80 and [i["tier"] for i in action["decisions"][-1]["items"]] == ["difficult"]
+    penalties = [a for a in h.get("/system/context")["actions"] if a["net_points"] < 0]
+    assert len(penalties) == 1 and penalties[0]["net_points"] == -40
+    assert h.get("/wallet")["available_points"] == 90
+    revised = h.post(f"/system/actions/{action['id']}/revisions", {"expected_version": action["version"], "content": "[测试：分项]\n数学2小时 [测试：困难]\n昨晚两点才睡 [测试：违规]\n补充：英语1小时"})
+    h.drain()
+    assert h.get(f"/system/actions/{revised['id']}")["net_points"] == 110
+    assert len([a for a in h.get("/system/context")["actions"] if a["net_points"] < 0]) == 1
+    assert h.get("/wallet")["available_points"] == 120
+    h.reconcile()
+
+
+def test_uncited_penalty_from_model_is_never_applied(h):
+    h.fund(50)
+    with h.db.transaction(True, h.owner) as c:
+        action = system.create_action(c, f"test:{uid()}", "SYNTHETIC 自述", queue=False)
+        decision = system.settle_judgment(c, action["id"], {"reason": "SYNTHETIC", "items": [
+            {"name": "数学", "tier": "normal", "points": 30}, {"name": "猜测违规", "tier": "penalty", "points": -20, "basis": "rule:unknown"}]})
+    assert decision["state"] == "needs_review" and h.get("/wallet")["available_points"] == 50

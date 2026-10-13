@@ -497,6 +497,11 @@ class PenaltyRuleCreate(Input):
     points: StrictInt = Field(ge=0, le=100)
 
 
+class PenaltyConfession(Input):
+    client_key: str = Field(min_length=8, max_length=200)
+    note: str = Field(default="", max_length=2000)
+
+
 class SkillSetting(Input):
     skill: Literal["wager", "shiyi"]
     enabled: StrictBool

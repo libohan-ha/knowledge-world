@@ -87,8 +87,7 @@ def execute_tool(c, name, arguments, run, user_content):
     if name == "propose_judgment":
         action = c.get("system_actions", args.action_id)
         require(action["message_id"] == context.get("message_id"), "ACTION_NOT_ALLOWED", "本轮只能判定本轮保存的行动；旧行动请使用修订入口", 403)
-        proposal = system.propose_decision(c, args.action_id, args.model_dump(exclude={"action_id"}), {"source": "system_agent", "is_test_adapter": c.db.settings.fake_provider})
-        return system.apply_decision(c, proposal["id"])
+        return system.settle_judgment(c, args.action_id, args.model_dump(exclude={"action_id"}), {"source": "system_agent", "is_test_adapter": c.db.settings.fake_provider})
     if name == "checkin":
         return routines.checkin(c) if user_content.strip() in {"签到", "帮我签到", "请签到", "早起签到"} else routines.checkin_status(c)
     if name == "read_wagers":
