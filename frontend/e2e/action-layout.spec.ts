@@ -1,0 +1,21 @@
+import {test,expect,password,api,noOverflow} from './fixtures'
+
+test('action records keep metadata, report and verdict in separate readable areas',async({page},info)=>{
+  await page.goto('/system?tab=actions')
+  await page.getByLabel('怎么称呼你').fill('SYNTHETIC action layout')
+  await page.getByLabel('账户密码').fill(password)
+  await page.getByRole('button',{name:'点亮我的营地'}).click()
+  await expect(page).toHaveURL(/world$/)
+  await api(page,'/system/actions','POST',{client_action_id:crypto.randomUUID(),content:'SYNTHETIC: completed review and organized notes. '.repeat(12)})
+  await page.goto('/system?tab=actions')
+  const entry=page.locator('.action-entry').first()
+  await expect(entry).toBeVisible()
+  await expect(entry.locator('.action-entry-heading')).toBeVisible()
+  await entry.getByText('查看全文',{exact:true}).first().click()
+  await expect(entry.locator('.action-report details')).toHaveAttribute('open','')
+  const heading=await entry.locator('.action-entry-heading').boundingBox()
+  const body=await entry.locator('.action-entry-body').boundingBox()
+  expect(body!.y).toBeGreaterThanOrEqual(heading!.y+heading!.height)
+  await noOverflow(page)
+  await page.screenshot({path:info.outputPath('action-history.png'),fullPage:true})
+})

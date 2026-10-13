@@ -183,3 +183,21 @@ button:disabled:not(.button){opacity:.3!important}
 .agent-action{margin:var(--space-16) 0}
 .fixed-task strong{color:var(--accent)}
 .fixed-task .core-actions{margin-top:var(--space-16)}
+.action-history{display:grid;gap:var(--space-16)}
+.action-entry{min-width:0;padding:var(--space-24);border:1px solid var(--border);border-radius:var(--radius-control);background:color-mix(in srgb,var(--background-deep) 18%,transparent)}
+.action-entry-heading{display:flex;align-items:center;justify-content:space-between;gap:var(--space-16);margin-bottom:var(--space-24);font-size:var(--font-caption);color:var(--text-inverse-muted)}
+.action-entry-heading>span:first-child{white-space:nowrap}
+.action-entry-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--space-32);align-items:start}
+.action-report,.action-verdicts{min-width:0}
+.action-section-label{display:block;font-size:var(--font-caption);color:var(--text-inverse-muted);margin-bottom:var(--space-12)}
+.action-verdicts{border-left:1px solid var(--border);padding-left:var(--space-24);display:grid;gap:var(--space-24)}
+.action-verdict>strong{display:block;color:var(--accent);font-family:var(--font-numeric);font-size:var(--font-card-title);margin-bottom:var(--space-12)}
+.action-record-text p{margin:0;line-height:1.85;white-space:pre-wrap;overflow-wrap:anywhere}
+.action-record-text:has(details)>p{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
+.action-record-text:has(details[open])>p{display:none}
+.action-record-text details{margin-top:var(--space-8)}
+.action-record-text summary{cursor:pointer;color:var(--text-inverse-muted);font-size:var(--font-caption);width:fit-content;padding:var(--space-4) 0}
+.action-record-text details[open] p{margin-top:var(--space-8)}
+.action-verdict>.text-link{display:inline-block;margin-top:var(--space-12);font-size:var(--font-caption)}
+.action-entry-footer{justify-content:flex-end;margin-top:var(--space-16);padding-top:var(--space-12);border-top:1px solid var(--border)}
+@media(max-width:700px){.action-entry{padding:var(--space-16)}.action-entry-heading{flex-wrap:wrap;margin-bottom:var(--space-16)}.action-entry-body{grid-template-columns:minmax(0,1fr);gap:var(--space-16)}.action-verdicts{border-left:0;border-top:1px solid var(--border);padding-left:0;padding-top:var(--space-16)}}
