@@ -40,6 +40,12 @@ def proposal(c, data):
         "timezone": c.tz,
         "missing_system_evidence_result": "void_and_refund",
     }
+    same = c.one("""SELECT id FROM commitments WHERE owner_id=:o AND state='proposed' AND accepted_at IS NULL AND title=:t
+        AND target_points=:target AND stake_coins=:s AND bonus_coins=:b AND deadline_at=:d AND terms_json=:terms AND rule_version=:v LIMIT 1""",
+        {"o": c.owner, "t": data.title, "target": data.target_points, "s": stake, "b": bonus, "d": deadline, "terms": dumps(terms), "v": rules["version"]})
+    if same:
+        # Identical open terms are one proposal, never a second card.
+        return detail(c, same["id"])
     row = c.insert(
         "commitments",
         id=uid(),

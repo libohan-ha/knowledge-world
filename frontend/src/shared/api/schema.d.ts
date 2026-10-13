@@ -603,6 +603,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/system/actions/{identity}/decline": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Action Decline */
+        post: operations["action_decline_api_v1_system_actions__identity__decline_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/system/runs/{identity}/cancel": {
         parameters: {
             query?: never;
@@ -1583,6 +1600,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/system/penalty-rules/{identity}/violations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Penalty Confess */
+        post: operations["penalty_confess_api_v1_system_penalty_rules__identity__violations_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/system/penalty-rules/{identity}": {
         parameters: {
             query?: never;
@@ -2142,10 +2176,33 @@ export interface components {
             model_info: {
                 [key: string]: unknown;
             };
+            /** Items */
+            items?: components["schemas"]["DecisionItem"][];
             /** Created At */
             created_at: string;
             /** Applied At */
             applied_at: string | null;
+        };
+        /** DecisionItem */
+        DecisionItem: {
+            /** Name */
+            name: string;
+            /** Tier */
+            tier: string;
+            /** Points */
+            points: number;
+            /**
+             * Reason
+             * @default
+             */
+            reason: string;
+            /**
+             * Basis
+             * @default action
+             */
+            basis: string;
+            /** Approved Points */
+            approved_points?: number | null;
         };
         /** DisplayPreferences */
         DisplayPreferences: {
@@ -3095,6 +3152,16 @@ export interface components {
             /** Next Cursor */
             next_cursor?: string | null;
         };
+        /** PenaltyConfession */
+        PenaltyConfession: {
+            /** Client Key */
+            client_key: string;
+            /**
+             * Note
+             * @default
+             */
+            note: string;
+        };
         /** PenaltyRule */
         PenaltyRule: {
             /** Id */
@@ -3695,6 +3762,10 @@ export interface components {
             state: string;
             /** Action Hash */
             action_hash: string;
+            /** Run Id */
+            run_id?: string | null;
+            /** Created At */
+            created_at?: string | null;
         };
         /** Unit */
         Unit: {
@@ -4978,6 +5049,37 @@ export interface operations {
                 "application/json": components["schemas"]["ActionConfirm"];
             };
         };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    action_decline_api_v1_system_actions__identity__decline_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                identity: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description Successful Response */
             200: {
@@ -7031,6 +7133,41 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Envelope_PenaltyRule_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    penalty_confess_api_v1_system_penalty_rules__identity__violations_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                identity: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PenaltyConfession"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_Action_"];
                 };
             };
             /** @description Validation Error */

@@ -1,0 +1,154 @@
+{
+  "version": "system-core-2026-10-10.2",
+  "status": "target_not_activated",
+  "timezone": "Asia/Shanghai",
+  "day_boundary": "00:00",
+  "description": "新系统养成产品的实现默认值。须经新迁移与领域适配后导入为不可变规则版本；本文件不直接替换当前运行库或旧 default-rules.json。",
+  "currency": {
+    "display_name": "积分",
+    "initial_available_points": 0,
+    "minimum_balance": 0,
+    "legacy_available_coins_ratio": 1,
+    "legacy_held_coins_ratio": 1,
+    "convert_legacy_learning_points": false
+  },
+  "system": {
+    "positive_tiers": {"small": 10, "normal": 30, "difficult": 80, "breakthrough": 150},
+    "max_award_per_action": 200,
+    "daily_positive_action_cap": 1000,
+    "max_penalty_per_action": 100,
+    "daily_penalty_cap": 200,
+    "penalty_requires_enabled_rule_or_accepted_challenge": true,
+    "penalty_uses_available_only": true,
+    "unknown_is_failure": false,
+    "max_tool_rounds_per_turn": 6
+  },
+  "checkin": {
+    "enabled": true,
+    "window_start": "06:45",
+    "window_end_exclusive": "07:15",
+    "requires_startup_answer": false,
+    "base_points": 5,
+    "streak_increment_points": 1,
+    "max_daily_points": 10,
+    "default_miss_penalty_points": 10,
+    "penalty_enabled_by_default": false,
+    "penalty_requires_enabled_plan": true,
+    "rest_day_keeps_streak": true,
+    "min_real_hours_between_rewards": 20,
+    "rule_changes_effective": "next_business_day"
+  },
+  "wager": {
+    "enabled": true,
+    "entrypoint": "system_skill",
+    "default_target_points": 500,
+    "default_stake_points": 500,
+    "default_success_bonus_points": 800,
+    "max_stake_points": 500,
+    "max_success_bonus_points": 800,
+    "max_acceptances_per_local_day": 1,
+    "max_active": 1,
+    "counting_scope": "eligible_earned_points_after_acceptance",
+    "eligible_credit_types": ["system_action_reward", "checkin_reward"],
+    "default_deadline": "next_local_midnight",
+    "max_deadline_days": 30,
+    "pending_decision_grace_hours": 24,
+    "missing_system_evidence_result": "void_and_refund",
+    "preserve_accepted_legacy_terms": true,
+    "disable_skill_cancels_active_contracts": false
+  },
+  "hero": {
+    "initial_level": 1,
+    "initial_attributes": {"strength": 10, "agility": 10, "mana": 10},
+    "max_training_steps": 60,
+    "visual_stage_min_levels": [1, 11, 31],
+    "attribute_gain_per_training": 1,
+    "training_base_cost": 20,
+    "training_cost_increment_per_step": 5,
+    "base_stats": {"hp": 100, "physical_attack": 10, "magic_attack": 5, "defense": 8, "resistance": 5, "speed": 5, "mp": 10},
+    "growth": {"hp_per_strength": 5, "attack_per_strength": 2, "speed_per_agility": 1, "magic_per_mana": 3, "mp_per_mana": 3, "dodge_bps_per_agility": 30},
+    "skill": {"code": "arcane_strike", "effect": "magic_damage", "mp_cost": 8, "every_nth_action": 3}
+  },
+  "monsters": {
+    "starter_code": "moss_bear",
+    "starter_quantity": 1,
+    "max_deployed": 3,
+    "max_level": 20,
+    "upgrade_base_cost": 30,
+    "upgrade_cost_increment_per_level": 10,
+    "stat_growth_bps_per_level": 1000,
+    "visual_stage_min_levels": [1, 5, 12],
+    "species": [
+      {"code": "moss_bear", "name": "石甲熊", "role": "guard", "recruit_cost": 120, "stats": {"hp": 160, "physical_attack": 18, "magic_attack": 0, "defense": 12, "resistance": 6, "speed": 7, "mp": 20}, "skill": {"code": "stone_guard", "effect": "shield", "amount": 35, "mp_cost": 6, "every_nth_action": 3}},
+      {"code": "shadow_wolf", "name": "暗影狼", "role": "damage", "recruit_cost": 150, "stats": {"hp": 90, "physical_attack": 28, "magic_attack": 4, "defense": 5, "resistance": 4, "speed": 15, "mp": 18}, "skill": {"code": "shadow_strike", "effect": "physical_damage", "power_bps": 14000, "mp_cost": 6, "every_nth_action": 3}},
+      {"code": "star_fox", "name": "星灯狐", "role": "support", "recruit_cost": 180, "stats": {"hp": 85, "physical_attack": 10, "magic_attack": 24, "defense": 4, "resistance": 10, "speed": 12, "mp": 40}, "skill": {"code": "starlight_heal", "effect": "heal", "amount": 30, "mp_cost": 8, "every_nth_action": 3}}
+    ]
+  },
+  "battle": {
+    "mode": "server_resolved_auto_pve",
+    "max_rounds": 30,
+    "max_dodge_bps": 2500,
+    "minimum_damage": 1,
+    "attempt_cost_points": 0,
+    "replay_awards": false,
+    "restore_temporary_hp_mp_after_battle": true,
+    "defeat_destroys_owned_units": false,
+    "defeat_auto_penalty_points": 0,
+    "first_clear_points": {"outpost": 10, "boss": 50}
+  },
+  "content": {
+    "minimum_regions": 3,
+    "minimum_outposts_per_region": 3,
+    "bosses_per_region": 1,
+    "minimum_monster_species": 3,
+    "minimum_home_decoration_items": 6,
+    "suggested_region_themes": ["mist_forest", "frost_ridge", "ancient_ruins"]
+  },
+  "home": {
+    "starter_building_code": "camp_hall",
+    "initial_building_level": 1,
+    "max_building_level": 3,
+    "upgrade_base_cost": 80,
+    "upgrade_cost_increment_per_level": 40,
+    "decoration_presets": [
+      {"code": "lantern", "name": "暖光路灯", "price_points": 40},
+      {"code": "flower_bed", "name": "月光花圃", "price_points": 50},
+      {"code": "reading_bench", "name": "林间长椅", "price_points": 60},
+      {"code": "stone_well", "name": "苔石水井", "price_points": 80},
+      {"code": "stargazing_deck", "name": "观星平台", "price_points": 120},
+      {"code": "companion_den", "name": "伙伴小屋", "price_points": 140}
+    ]
+  },
+  "jobs": {
+    "lease_seconds": 60,
+    "heartbeat_seconds": 15,
+    "max_safe_attempts": 3,
+    "retry_delays_seconds": [5, 30, 120]
+  },
+  "storage": {
+    "backup_keep_count": 7,
+    "backup_local_time": "03:00"
+  },
+  "ai": {
+    "text_timeout_seconds": 90,
+    "max_concurrent_per_provider": 2,
+    "retry_ambiguous_paid_requests_automatically": false
+  },
+  "leisure": {
+    "max_running_per_account": 1,
+    "expires_after_days": null,
+    "charge_policy": "hold_on_redeem_spend_on_first_start",
+    "refund_policy": "full_before_first_start",
+    "unused_time_policy": "keep_after_pause",
+    "automatic_overtime_penalty": false,
+    "max_duration_minutes": 1440,
+    "max_price_points": 10000,
+    "presets": [
+      {"code": "leisure_anime", "name": "动漫时光", "duration_minutes": 120, "price_points": 120},
+      {"code": "leisure_manga", "name": "漫画时光", "duration_minutes": 120, "price_points": 120},
+      {"code": "leisure_ai_project", "name": "自由折腾 AI 项目", "duration_minutes": 60, "price_points": 60},
+      {"code": "leisure_novel", "name": "小说时光", "duration_minutes": 120, "price_points": 120},
+      {"code": "leisure_browse", "name": "聊天记录、论坛与帖子", "duration_minutes": 30, "price_points": 30}
+    ]
+  }
+}

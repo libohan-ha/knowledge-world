@@ -1,5 +1,5 @@
 {
-  "version": "system-core-2026-10-10.2",
+  "version": "system-core-2026-10-13.1",
   "status": "target_not_activated",
   "timezone": "Asia/Shanghai",
   "day_boundary": "00:00",
@@ -14,7 +14,18 @@
   },
   "system": {
     "positive_tiers": {"small": 10, "normal": 30, "difficult": 80, "breakthrough": 150},
+    "scoring_mode": "itemized_sum",
+    "tier_criteria": {
+      "small": "单项不足 30 分钟，或轻量、琐碎的一步：背 20 个单词、整理 15 分钟笔记、做 1~2 道基础题",
+      "normal": "约 1 小时的常规学习或复习：1 小时英语阅读/作文、复习一章笔记、3~5 道常规题",
+      "difficult": "≥2 小时专注的高强度投入，或一整套真题/模拟卷：4 小时数学、408 真题一套、独立完成 5 道算法题",
+      "breakthrough": "攻克长期卡住的难点或达成里程碑：第一次独立做出一直不会的题型、某科真题首次达到目标分"
+    },
+    "tier_signals": "以时长与题量为主要信号；同一份汇报拆为相互独立的事项分别定档，后端按档位求和，不接受档位外的分值",
+    "max_items_per_report": 12,
+    "calibration_days": 7,
     "max_award_per_action": 200,
+    "max_award_per_action_scope": "per_item",
     "daily_positive_action_cap": 1000,
     "max_penalty_per_action": 100,
     "daily_penalty_cap": 200,

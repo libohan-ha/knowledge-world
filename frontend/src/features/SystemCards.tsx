@@ -1,6 +1,6 @@
 import {useRef,useState} from 'react'
 import {Link,useSearchParams} from 'react-router-dom'
-import {Check,Flame,Plus,Sunrise,Target} from 'lucide-react'
+import {Check,Flame,Plus,ShieldAlert,Sunrise,Target} from 'lucide-react'
 import {useApi,usePagedApi,useCommand,displayTime,changeDay,type Schema,type RecordView} from '../shared/api/client'
 import {Badge,Button,Empty,ErrorNotice,Field,Form,Modal,Notice,Panel} from '../shared/ui'
 import {LoadMore} from '../shared/LoadMore'
@@ -35,4 +35,18 @@ function LegacyFacts({wager}:{wager:Schema<'Wager'>}){
     {query.data?.map(fact=><article className="core-record" key={fact.id}><Badge state={fact.state}/><p>{fact.narrative_md}</p>{fact.evidence.length>1&&<details><summary>补充过的证据</summary>{fact.evidence.slice(1).map((item,index)=><p key={index}>{string(item.content_text)}</p>)}</details>}{fact.assessments[0]&&<p>{string(fact.assessments[0].reasoning_summary)}</p>}<div className="core-actions"><Button kind="secondary" busy={command.isPending} onClick={()=>command.mutate({path:'/system/legacy-facts/'+fact.id+'/resume'})}>继续处理原事实</Button><Button kind="quiet" onClick={()=>{setEditing(fact);setAmendment('')}}>补充或纠错</Button>{fact.receipts.map(receipt=><Link key={receipt.id} to={'/ledger?receipt='+receipt.id}>原规则回执</Link>)}</div>{fact.job_id&&<JobStatus id={fact.job_id}/>}</article>)}
     <ErrorNotice error={command.error||query.error}/>{editing&&<Modal title="补充原合约事实" onClose={()=>setEditing(null)}><Form onSubmit={async()=>{try{await command.mutateAsync({path:'/system/legacy-facts/'+editing.id+'/revisions',body:{expected_version:editing.version,content:amendment}});setEditing(null)}catch{}}}><p>原文和此前判定会保留。截止后只能处理已提交证据，不能补写新的事实。</p><Field label="补充或纠错说明"><textarea value={amendment} onChange={e=>setAmendment(e.target.value)} rows={6} required maxLength={20000}/></Field><Button type="submit" busy={command.isPending}>追加说明，按原规则重评</Button><ErrorNotice error={command.error}/></Form></Modal>}
   </details>
+}
+
+/** "我违规了": the user claims a violation of one of their own enabled, effective rules. */
+export function ConfessViolation({rule,label='我违规了'}:{rule:Schema<'PenaltyRule'>;label?:string}){
+  const {today}=useApp(),command=useCommand<Schema<'Action'>>(),[open,setOpen]=useState(false),[note,setNote]=useState(''),[done,setDone]=useState<Schema<'Action'>|null>(null),key=useRef(crypto.randomUUID())
+  const active=!rule.disabled_at&&rule.effective_date<=today
+  if(rule.disabled_at)return null
+  return <><Button kind="secondary" className="confess-button" disabled={!active} title={active?undefined:`${rule.effective_date} 起生效`} onClick={()=>{setOpen(true);setDone(null);setNote('');key.current=crypto.randomUUID()}}><ShieldAlert size={16}/>{active?label:`${rule.effective_date} 起可用`}</Button>
+    {open&&<Modal title="确认一次违规" onClose={()=>setOpen(false)}>{done?<div className="form"><p className="penalty-amount">{done.net_points<0?`${done.net_points} 积分`:'本次未扣分'}</p><p>{done.decisions.at(-1)?.reason}</p>{done.net_points>-rule.points&&<small className="muted">实际扣分受单次/每日上限与可用积分约束。</small>}<div className="core-actions">{done.decisions.at(-1)?.ledger_id&&<Link className="text-link" to={'/ledger?receipt='+done.decisions.at(-1)!.ledger_id}>扣分回执</Link>}<Button kind="quiet" onClick={()=>setOpen(false)}>好的</Button></div></div>:
+      <Form onSubmit={async()=>{try{setDone(await command.mutateAsync({path:'/system/penalty-rules/'+rule.id+'/violations',body:{client_key:key.current,note}}))}catch{}}}><div className="penalty-terms"><strong>{rule.title}</strong><p>{rule.condition}</p><span>按此规则最多扣 <b>{rule.points}</b> 积分</span></div><Field label="补充说明（可选）"><textarea rows={3} value={note} maxLength={2000} onChange={e=>{setNote(e.target.value);key.current=crypto.randomUUID()}} placeholder="例如：昨晚 1:40 才睡。"/></Field><small className="muted">只按你已授权的规则扣分，不会超过可用积分与每日上限。可在行动记录里补充或纠错。</small><Button type="submit" kind="danger-button" busy={command.isPending}>确认违规并扣分</Button><ErrorNotice error={command.error}/></Form>}</Modal>}</>
+}
+export function PenaltyQuick(){
+  const {today}=useApp(),rules=useApi<Schema<'PenaltyRule'>[]>('/system/penalty-rules'),enabled=rules.data?.filter(rule=>!rule.disabled_at)||[]
+  return <Panel className="core-card penalty-quick" title="主动认领一次违规" action={<ShieldAlert size={20}/>}>{enabled.length?<><p>诚实记录也是成长的一部分。只能按已授权、已生效的规则扣分。</p><div className="penalty-rule-list">{enabled.map(rule=><div key={rule.id} className="penalty-rule-row"><div><strong>{rule.title}</strong><small>{rule.condition} · 最多 {rule.points} 积分{rule.effective_date>today?` · ${rule.effective_date} 生效`:''}</small></div><ConfessViolation rule={rule}/></div>)}</div></>:<p>还没有启用的扣罚规则。<Link className="text-link" to="/settings?tab=rules">去设置授权一条</Link></p>}<ErrorNotice error={rules.error}/></Panel>
 }

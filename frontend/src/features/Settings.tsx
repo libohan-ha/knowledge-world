@@ -8,6 +8,7 @@ import {LoadMore} from '../shared/LoadMore'
 import {useApp} from '../app-context'
 import {JobStatus} from './Agent'
 import {ShiyiSettings} from './Shiyi'
+import {ConfessViolation} from './SystemCards'
 
 function ProviderEditor({config}: {config?: Schema<'ProviderView'>}) {
   const [url,setUrl]=useState(config?.base_url||''),[model,setModel]=useState(config?.model||'')
@@ -64,7 +65,7 @@ function RulesEditor(){
 function PenaltyRules(){
   const data=useApi<Schema<'PenaltyRule'>[]>('/system/penalty-rules'),cmd=useCommand(),[title,setTitle]=useState(''),[condition,setCondition]=useState(''),[points,setPoints]=useState(10)
   return <Panel title="我授权的扣罚规则"><p>启用后从下一业务日生效。只有能核对到具体事实时才可判罚，余额与每日上限仍由系统检查。</p>
-    <div className="record-list">{data.data?.map(rule=><article key={rule.id}><div><strong>{rule.title} · 最多 {rule.points} 积分</strong><p>{rule.condition}</p><small>{rule.effective_date} 生效</small></div>{rule.disabled_at?<Badge label="已关闭"/>:<Button kind="quiet" busy={cmd.isPending} onClick={()=>cmd.mutate({path:'/system/penalty-rules/'+rule.id,method:'DELETE'})}>关闭此规则</Button>}</article>)}</div>
+    <div className="record-list">{data.data?.map(rule=><article key={rule.id}><div><strong>{rule.title} · 最多 {rule.points} 积分</strong><p>{rule.condition}</p><small>{rule.effective_date} 生效</small></div>{rule.disabled_at?<Badge label="已关闭"/>:<div className="core-actions"><ConfessViolation rule={rule}/><Button kind="quiet" busy={cmd.isPending} onClick={()=>cmd.mutate({path:'/system/penalty-rules/'+rule.id,method:'DELETE'})}>关闭此规则</Button></div>}</article>)}</div>
     <details><summary>授权一条新的具体罚则</summary><Form onSubmit={async()=>{try {await cmd.mutateAsync({path:'/system/penalty-rules',body:{title,condition,points}});setTitle('');setCondition('')} catch {}}}>
       <Field label="规则名称"><input value={title} onChange={e=>setTitle(e.target.value)} required maxLength={200}/></Field><Field label="触发条件" hint="明确写出什么行为、满足哪些事实才扣罚。"><textarea value={condition} onChange={e=>setCondition(e.target.value)} required maxLength={2000}/></Field><Field label="每次最多扣罚积分"><input type="number" min={0} max={100} value={points} onChange={e=>setPoints(Number(e.target.value))} required/></Field><Button type="submit" busy={cmd.isPending}>授权此规则，明日起生效</Button></Form></details><ErrorNotice error={data.error||cmd.error}/>
   </Panel>

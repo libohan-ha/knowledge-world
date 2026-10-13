@@ -680,6 +680,13 @@ def action_confirm(identity: str, data: m.ActionConfirm, c=C):
     return response(c, confirm_action(c, identity, data.action_hash))
 
 
+@router.post("/system/actions/{identity}/decline")
+def action_decline(identity: str, c=C):
+    from .agent import decline_action
+
+    return response(c, decline_action(c, identity))
+
+
 @router.post("/system/runs/{identity}/cancel")
 def agent_cancel(identity: str, c=C):
     run = c.get("agent_runs", identity)

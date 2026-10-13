@@ -339,6 +339,44 @@ export function restRoomModel(): Model {
   return s.finish()
 }
 
+/** Study cabin: a desk under the window, a warm lamp, an open book and a shelf. */
+export function studyRoomModel(): Model {
+  const s = new Sculpture()
+  s.box([2.3, 0.14, 1.8], [0, 0.07, 0], P.stone, [0, 0, 0], 0.065)
+  for (let i = 0; i < 15; i++) s.box([0.144, 0.025, 1.65], [-1.05 + i * 0.15, 0.16, 0], i % 3 ? P.wood : P.path)
+  s.box([2.2, 1.16, 0.13], [0, 0.7, -0.84], P.wall, [0, 0, 0], 0.02)
+  s.box([0.13, 0.67, 1.7], [-1.085, 0.48, -0.02], P.wall_shade, [0, 0, 0], 0.02)
+  s.box([2.25, 0.07, 0.18], [0, 1.32, -0.84], P.timber)
+  s.window([0.05, 0.86, -0.755], [0.72, 0.5, 0.025])
+  s.box([1.2, 0.18, 0.025], [0.05, 1.18, -0.76], P.roof_forest, [0, 0, 0], 0.01)
+  // rug, desk and chair
+  s.box([1.25, 0.012, 0.8], [0.05, 0.18, 0.1], P.roof_plaza, [0, 0, 0], 0.004)
+  s.box([1.05, 0.05, 0.46], [0.05, 0.56, -0.48], P.wood, [0, 0, 0], 0.012)
+  for (const x of [-0.42, 0.52]) for (const z of [-0.66, -0.3]) s.box([0.05, 0.38, 0.05], [x, 0.36, z], P.timber)
+  s.box([0.3, 0.16, 0.4], [0.36, 0.44, -0.48], P.timber, [0, 0, 0], 0.01)
+  s.box([0.36, 0.05, 0.34], [0.02, 0.38, -0.02], P.wood, [0, 0.12, 0], 0.012)
+  s.box([0.36, 0.38, 0.05], [0.0, 0.58, 0.14], P.wood, [0, 0.12, 0], 0.012)
+  for (const x of [-0.13, 0.17]) for (const z of [-0.15, 0.12]) s.box([0.04, 0.22, 0.04], [x, 0.26, z], P.timber)
+  // open book, a stack, a mug and the lamp
+  s.box([0.2, 0.012, 0.15], [-0.06, 0.592, -0.42], P.wall, [0, 0, 0.07])
+  s.box([0.2, 0.012, 0.15], [0.14, 0.592, -0.42], P.wall, [0, 0, -0.07])
+  books(s, [-0.36, 0.64, -0.55], 4)
+  s.cylinder(0.036, 0.032, 0.08, [0.32, 0.625, -0.36], P.roof_valley, 12)
+  s.cylinder(0.07, 0.08, 0.025, [-0.3, 0.597, -0.62], P.metal, 14)
+  beam(s, [-0.3, 0.6, -0.62], [-0.22, 0.86, -0.6], 0.012, P.metal)
+  beam(s, [-0.22, 0.86, -0.6], [-0.08, 0.84, -0.5], 0.012, P.metal)
+  s.add(new THREE.ConeGeometry(0.08, 0.1, 14, 1, true), '#FFFFFF', [-0.06, 0.8, -0.49], [0.3, 0, 0], [1, 1, 1], true)
+  // shelf with books and a small plant
+  for (const x of [-0.98, -0.5]) s.box([0.045, 0.9, 0.26], [x, 0.64, -0.62], P.timber)
+  for (let shelf = 0; shelf < 4; shelf++) {
+    s.box([0.5, 0.04, 0.26], [-0.74, 0.21 + shelf * 0.255, -0.62], P.wood)
+    if (shelf < 3) books(s, [-0.92, 0.28 + shelf * 0.255, -0.6], 6 + shelf % 2 * 2)
+  }
+  s.cylinder(0.07, 0.05, 0.11, [-0.66, 1.07, -0.62], P.roof_plaza, 12)
+  s.sphere(0.11, [-0.66, 1.18, -0.62], P.foliage[1], [1, 0.8, 1])
+  return s.finish()
+}
+
 const decorators: Record<string, () => Model> = {flower_bed: flowerBed, reading_bench: readingBench, stone_well: stoneWell, stargazing_deck: stargazingDeck, companion_den: companionDen}
 const units: Record<string, (stage: number, pose: UnitPose) => Model> = {hero: heroModel, moss_bear: bearModel, shadow_wolf: wolfModel, star_fox: starFoxModel}
 
@@ -351,5 +389,6 @@ export function gameModelFactory(key: string): (() => Model) | undefined {
   if (kind === 'outpost' && rules.content.suggested_region_themes.includes(code) && ['boss', 'camp'].includes(stageText) && ['occupied', 'hostile'].includes(poseText)) return () => outpostModel(code, stageText === 'boss', poseText === 'occupied')
   if (kind === 'trophy' && rules.content.suggested_region_themes.includes(code)) return () => trophyModel(code)
   if (key === 'room:reading') return restRoomModel
+  if (key === 'room:study') return studyRoomModel
   return undefined
 }
