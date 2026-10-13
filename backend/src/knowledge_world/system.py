@@ -355,8 +355,17 @@ def propose_challenge(c, data):
         except ValueError:
             raise DomainError("INVALID_INPUT", "截止时间无效", 400)
         require(deadline > c.now, "INVALID_INPUT", "截止时间已过去", 400)
-    identity = uid()
     values = data.model_dump(exclude={"deadline_at"})
+    # The agent may propose the same terms twice (a repeated tool call in one
+    # turn, or again on "好的" next turn). Identical open terms reuse one card.
+    same = c.one("""SELECT id FROM system_challenges WHERE owner_id=:o AND state='proposed' AND accepted_at IS NULL
+        AND trim(title)=:t AND trim(goal)=:g AND reward_points=:r AND penalty_points=:p AND trim(penalty_condition)=:pc
+        AND deadline_at IS :d AND (deadline_at IS NULL OR deadline_at>:now) ORDER BY created_at LIMIT 1""",
+        {"o": c.owner, "t": data.title.strip(), "g": data.goal.strip(), "r": data.reward_points, "p": data.penalty_points,
+         "pc": data.penalty_condition.strip(), "d": deadline, "now": c.now})
+    if same:
+        return challenge_view(c, same["id"])
+    identity = uid()
     c.insert("system_challenges", id=identity, owner_id=c.owner, **values, deadline_at=deadline,
         rule_version=c.rules()["version"], terms_json=dumps(data.model_dump()), state="proposed", created_at=c.now)
     c.change("system")

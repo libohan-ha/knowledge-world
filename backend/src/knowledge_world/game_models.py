@@ -622,6 +622,8 @@ class ToolCard(BaseModel):
     result: dict[str, Any]
     state: str
     action_hash: str
+    run_id: str | None = None
+    created_at: str | None = None
 
 
 class AgentThread(BaseModel):

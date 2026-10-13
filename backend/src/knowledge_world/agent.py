@@ -168,6 +168,27 @@ def confirm_action(c, identity, action_hash):
     c.update("agent_tool_calls", identity, state="executed")
     return result
 
+def decline_action(c, identity):
+    """Decline a pending card: the proposal it shows is withdrawn, never executed."""
+    call = c.get("agent_tool_calls", identity)
+    c.get("agent_runs", call["run_id"])
+    if call["state"] != "proposed":
+        return {"id": identity, "state": call["state"]}
+    data = json.loads(call["result_json"] or "{}")
+    name = call["tool_name"]
+    if name == "propose_challenge" and data.get("id"):
+        row = c.get("system_challenges", data["id"])
+        if row["state"] == "proposed" and row["accepted_at"] is None:
+            c.update("system_challenges", row["id"], state="cancelled", version=row["version"] + 1)
+    elif name == "propose_wager" and data.get("id"):
+        row = c.get("commitments", data["id"])
+        if row["state"] == "proposed" and row["accepted_at"] is None:
+            c.update("commitments", row["id"], state="cancelled", version=row["version"] + 1)
+    c.update("agent_tool_calls", identity, state="rejected")
+    c.change("system")
+    return {"id": identity, "state": "rejected"}
+
+
 def create_thread(c, data):
     require(set(data.context) <= {"action_id", "battle_id", "wager_id", "challenge_id"}, "INVALID_INPUT", "会话仅支持当前系统对象", 400)
     for key, table in [("action_id", "system_actions"), ("battle_id", "battles"), ("wager_id", "commitments"), ("challenge_id", "system_challenges")]:
@@ -196,7 +217,7 @@ def thread_detail(c, identity):
         "SELECT tc.* FROM agent_tool_calls tc JOIN agent_runs r ON r.id=tc.run_id WHERE r.thread_id=:id AND tc.state='proposed' ORDER BY tc.created_at",
         {"id": identity},
     )
-    pending, seen = [], set()
+    pending = []
     for call in calls:
         result = json.loads(call['result_json'] or '{}')
         name = call['tool_name']
@@ -206,14 +227,23 @@ def thread_detail(c, identity):
             allowed = {'active', 'pending_settlement'} if name == 'abandon_wager' else {'proposed'}
             if entity['state'] not in allowed:
                 continue
+            # A proposal past its deadline can no longer be accepted; it is not pending.
+            if name != 'abandon_wager' and entity['deadline_at'] is not None and entity['deadline_at'] <= c.now:
+                continue
         if name == 'propose_quote' and result.get('expires_at'):
             from datetime import datetime
             if datetime.fromisoformat(result['expires_at']).timestamp() * 1000 <= c.now:
                 continue
-        key = (name, result.get('id') or result.get('quote_id') or digest(call['result_json'] or '{}'))
-        if key not in seen:
-            seen.add(key)
-            pending.append(call)
+        # Older duplicates (created before proposals were idempotent) share terms
+        # but not ids; the newest card wins and earlier copies are hidden.
+        keys = {(name, result.get('id') or result.get('quote_id') or digest(call['result_json'] or '{}'))}
+        if result.get('terms_hash'):
+            keys.add((name, 'terms', result.get('title'), result['terms_hash']))
+        if name == 'propose_challenge':
+            keys.add((name, 'terms', *(str(result.get(k, '')).strip() for k in ('title', 'goal', 'reward_points', 'penalty_points', 'penalty_condition', 'deadline_at'))))
+        pending = [p for p in pending if not (p[1] & keys)]
+        pending.append((call, keys))
+    pending = [p[0] for p in pending]
     calls = pending
     return {
         **public(row),
@@ -407,6 +437,7 @@ def run_turn(db, job):
         "没有返回内容不能声称读取成功；不建立站内学习资料、题库、复习计划或屏幕时间。"
         "用户只查询外部事实时不要 record_action 或 propose_judgment。"
         "普通任务可提议，但条件只有用户接受才生效。购买和出战建议要交给明确报价/阵容卡。"
+        "同一份条款每轮只提议一次；用户回复“好/可以”时不要再次调用 propose_challenge/propose_wager，条款卡会固定显示在输入框上方的“待确认条款”中，回复里一句话提示核对即可，不要整段复述条款。"
         "当前环境信息与真实状态：" + dumps(context)
     )
     messages = [{"role": "system", "content": system}] + [
