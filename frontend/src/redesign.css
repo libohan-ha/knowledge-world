@@ -256,3 +256,37 @@ button:disabled:not(.button){opacity:.3!important}
 .table-scroll{padding-bottom:var(--space-8)}
 @media(max-width:760px){.core-card,.panel{padding:var(--space-16)}.core-card .core-card{padding:var(--space-12) var(--space-16)!important}.agent-messages{padding:var(--space-16) var(--space-16) var(--space-24) var(--space-12)!important}.dialog{padding:var(--space-16)}.record-list>article.core-record{padding:var(--space-12)}}
 @media(prefers-reduced-motion:reduce){.agent-messages,.code-block,.terms-tray-list,.dialog{scroll-behavior:auto}}
+
+/* ---------- night glass (夜玻璃): every card is a pane of dark frosted glass ----------
+   Palette lives in design-tokens.json (color.glass_*, glass.blur_px/saturate_pct). */
+:root{
+  --glass-blur:18px;--glass-saturate:150%;
+  --card-bg:linear-gradient(180deg,var(--glass-bg-top,#33365090) 0%,var(--glass-bg,#2A2C40B8) 42%,var(--glass-bg,#2A2C40B8) 100%);
+  --card-edge:1px solid var(--glass-border,#FFFFFF1A);
+  --card-shadow:inset 0 1px 0 var(--glass-highlight,#FFFFFF17),inset 0 0 0 1px #FFFFFF05,0 24px 56px -18px var(--glass-shadow,#05060CA6),0 2px 10px #00000033;
+}
+body{background:
+  radial-gradient(1100px 620px at 78% -8%,#3A3F6A55 0%,transparent 62%),
+  radial-gradient(900px 600px at 6% 18%,#2E4A3A40 0%,transparent 60%),
+  radial-gradient(800px 520px at 60% 108%,#5A3E5C33 0%,transparent 60%),
+  var(--background);background-attachment:fixed}
+.panel,.core-card,.game-art-panel,.catalog-card,.reward-card,.story-card,.agent-panel.full,.welcome-form{
+  background:var(--card-bg)!important;border:var(--card-edge)!important;box-shadow:var(--card-shadow)!important;border-radius:var(--radius-card)!important;
+  -webkit-backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate));backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate))}
+.panel:hover,.core-card:hover{border-color:color-mix(in srgb,var(--glass-border,#FFFFFF1A) 60%,var(--glass-border-accent,#E2C38A2E))!important}
+/* nested panes are lighter tints, not a second blur */
+.core-card .core-card,.panel .panel,.core-card .panel,.dialog .panel{background:var(--glass-bg-inner,#FFFFFF08)!important;-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:inset 0 1px 0 #FFFFFF0A!important;border:1px solid #FFFFFF10!important;border-radius:var(--radius-control)!important}
+.dialog{background:var(--glass-bg-strong,#24263AE6)!important;border:1px solid var(--glass-border,#FFFFFF1A)!important;box-shadow:inset 0 1px 0 var(--glass-highlight,#FFFFFF17),0 40px 100px -20px #000000B3!important;-webkit-backdrop-filter:blur(calc(var(--glass-blur) + 8px)) saturate(var(--glass-saturate));backdrop-filter:blur(calc(var(--glass-blur) + 8px)) saturate(var(--glass-saturate))}
+.dialog-heading{background:transparent!important}
+.dialog::backdrop{background:#0B0C15A6;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.agent-dock{background:var(--glass-bg-strong,#24263AE6)!important;border-left:1px solid var(--glass-border,#FFFFFF1A)!important;-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate));backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate))}
+.agent-composer{background:transparent!important}
+.today-stats,.review-summary,.ledger-stats,.monitor-stats{background:var(--card-bg)!important;border:var(--card-edge);box-shadow:var(--card-shadow);-webkit-backdrop-filter:blur(var(--glass-blur));backdrop-filter:blur(var(--glass-blur))}
+input,textarea,select{background:#12131FB3!important;border-color:#FFFFFF1A!important}
+.notice{background:#FFFFFF07!important;border:1px solid #FFFFFF12!important}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .panel,.core-card,.game-art-panel,.catalog-card,.reward-card,.story-card,.agent-panel.full,.dialog,.agent-dock{background:var(--glass-bg-strong,#24263AE6)!important}
+}
+@media(prefers-reduced-transparency:reduce){
+  .panel,.core-card,.game-art-panel,.catalog-card,.reward-card,.story-card,.agent-panel.full,.dialog,.agent-dock{background:var(--glass-effective,#272A3D)!important;-webkit-backdrop-filter:none;backdrop-filter:none}
+}

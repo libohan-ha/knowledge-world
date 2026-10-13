@@ -43,6 +43,7 @@ function applyTokens() {
   root.style.setProperty('--font-body',tokens.font.body); root.style.setProperty('--font-display',tokens.font.display)
   root.style.setProperty('--font-numeric',tokens.font.numeric); root.style.setProperty('--nav-width',tokens.layout_px.navigation_width+'px')
   root.style.setProperty('--agent-width',tokens.layout_px.agent_width+'px')
+  root.style.setProperty('--glass-blur',tokens.glass.blur_px+'px'); root.style.setProperty('--glass-saturate',tokens.glass.saturate_pct+'%')
 }
 applyTokens()
 

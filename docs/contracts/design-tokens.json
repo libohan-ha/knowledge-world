@@ -1,7 +1,7 @@
 {
-  "version": "2.1.0",
+  "version": "2.2.0",
   "status": "system_core_visual_implementation_in_progress",
-  "date": "2026-10-10",
+  "date": "2026-10-13",
   "reference_decisions": "../09-视觉参考与风格评审.md",
   "specification": "../10-视觉设计规范.md",
   "color": {
@@ -24,7 +24,21 @@
     "border": "#3E4160",
     "border_inverse": "#3E4160",
     "focus": "#E2C38A",
-    "focus_inverse": "#E2C38A"
+    "focus_inverse": "#E2C38A",
+    "glass_bg": "#2A2C40B8",
+    "glass_bg_top": "#33365090",
+    "glass_bg_strong": "#24263AE6",
+    "glass_bg_inner": "#FFFFFF08",
+    "glass_border": "#FFFFFF1A",
+    "glass_border_accent": "#E2C38A2E",
+    "glass_highlight": "#FFFFFF17",
+    "glass_shadow": "#05060CA6",
+    "glass_effective": "#272A3D"
+  },
+  "glass": {
+    "blur_px": 18,
+    "saturate_pct": 150,
+    "note": "夜玻璃：半透明深色底 + backdrop blur/saturate + 1px 浅色描边 + 顶部内高光 + 深而柔的投影。glass_effective 是 glass_bg 叠在 background 上的近似合成色，仅用于对比度核对。"
   },
   "chart": {
     "learning": "#3F6267",
@@ -422,6 +436,16 @@
       "foreground": "color.focus_inverse",
       "background": "color.background",
       "minimum": 3
+    },
+    {
+      "foreground": "color.text",
+      "background": "color.glass_effective",
+      "minimum": 4.5
+    },
+    {
+      "foreground": "color.text_muted",
+      "background": "color.glass_effective",
+      "minimum": 4.5
     }
   ]
 }
