@@ -35,7 +35,7 @@ DESCRIPTIONS = {
     "read_skills": "查询已安装的 Skill、当前可用状态和配置入口；拾忆/Shiyi 是外部只读 Skill，对赌也是 Skill",
     "read_system": "读取系统、钱包、任务与真实回执，不产生奖励",
     "record_action": "将本轮用户实际原话保存为唯一自述行动，只有实际行动才调用",
-    "propose_judgment": "建议该行动的净积分目标与理由，程序校验上限与依据后返回正式回执",
+    "propose_judgment": "按事项（items）建议该行动的积分：每个独立事项一个档位，分值必须等于档位值，程序求和并校验上限后返回正式回执",
     "checkin": "明确收到签到指令时执行今日签到，否则只读签到卡",
     "read_wagers": "查询对赌条款、进度、押金归属及结算历史",
     "propose_wager": "创建对赌条款卡；接受前不会冻结押金",
@@ -87,8 +87,7 @@ def execute_tool(c, name, arguments, run, user_content):
     if name == "propose_judgment":
         action = c.get("system_actions", args.action_id)
         require(action["message_id"] == context.get("message_id"), "ACTION_NOT_ALLOWED", "本轮只能判定本轮保存的行动；旧行动请使用修订入口", 403)
-        proposal = system.propose_decision(c, args.action_id, args.model_dump(exclude={"action_id"}), {"source": "system_agent", "is_test_adapter": c.db.settings.fake_provider})
-        return system.apply_decision(c, proposal["id"])
+        return system.settle_judgment(c, args.action_id, args.model_dump(exclude={"action_id"}), {"source": "system_agent", "is_test_adapter": c.db.settings.fake_provider})
     if name == "checkin":
         return routines.checkin(c) if user_content.strip() in {"签到", "帮我签到", "请签到", "早起签到"} else routines.checkin_status(c)
     if name == "read_wagers":
@@ -169,6 +168,27 @@ def confirm_action(c, identity, action_hash):
     c.update("agent_tool_calls", identity, state="executed")
     return result
 
+def decline_action(c, identity):
+    """Decline a pending card: the proposal it shows is withdrawn, never executed."""
+    call = c.get("agent_tool_calls", identity)
+    c.get("agent_runs", call["run_id"])
+    if call["state"] != "proposed":
+        return {"id": identity, "state": call["state"]}
+    data = json.loads(call["result_json"] or "{}")
+    name = call["tool_name"]
+    if name == "propose_challenge" and data.get("id"):
+        row = c.get("system_challenges", data["id"])
+        if row["state"] == "proposed" and row["accepted_at"] is None:
+            c.update("system_challenges", row["id"], state="cancelled", version=row["version"] + 1)
+    elif name == "propose_wager" and data.get("id"):
+        row = c.get("commitments", data["id"])
+        if row["state"] == "proposed" and row["accepted_at"] is None:
+            c.update("commitments", row["id"], state="cancelled", version=row["version"] + 1)
+    c.update("agent_tool_calls", identity, state="rejected")
+    c.change("system")
+    return {"id": identity, "state": "rejected"}
+
+
 def create_thread(c, data):
     require(set(data.context) <= {"action_id", "battle_id", "wager_id", "challenge_id"}, "INVALID_INPUT", "会话仅支持当前系统对象", 400)
     for key, table in [("action_id", "system_actions"), ("battle_id", "battles"), ("wager_id", "commitments"), ("challenge_id", "system_challenges")]:
@@ -197,7 +217,7 @@ def thread_detail(c, identity):
         "SELECT tc.* FROM agent_tool_calls tc JOIN agent_runs r ON r.id=tc.run_id WHERE r.thread_id=:id AND tc.state='proposed' ORDER BY tc.created_at",
         {"id": identity},
     )
-    pending, seen = [], set()
+    pending = []
     for call in calls:
         result = json.loads(call['result_json'] or '{}')
         name = call['tool_name']
@@ -207,14 +227,23 @@ def thread_detail(c, identity):
             allowed = {'active', 'pending_settlement'} if name == 'abandon_wager' else {'proposed'}
             if entity['state'] not in allowed:
                 continue
+            # A proposal past its deadline can no longer be accepted; it is not pending.
+            if name != 'abandon_wager' and entity['deadline_at'] is not None and entity['deadline_at'] <= c.now:
+                continue
         if name == 'propose_quote' and result.get('expires_at'):
             from datetime import datetime
             if datetime.fromisoformat(result['expires_at']).timestamp() * 1000 <= c.now:
                 continue
-        key = (name, result.get('id') or result.get('quote_id') or digest(call['result_json'] or '{}'))
-        if key not in seen:
-            seen.add(key)
-            pending.append(call)
+        # Older duplicates (created before proposals were idempotent) share terms
+        # but not ids; the newest card wins and earlier copies are hidden.
+        keys = {(name, result.get('id') or result.get('quote_id') or digest(call['result_json'] or '{}'))}
+        if result.get('terms_hash'):
+            keys.add((name, 'terms', result.get('title'), result['terms_hash']))
+        if name == 'propose_challenge':
+            keys.add((name, 'terms', *(str(result.get(k, '')).strip() for k in ('title', 'goal', 'reward_points', 'penalty_points', 'penalty_condition', 'deadline_at'))))
+        pending = [p for p in pending if not (p[1] & keys)]
+        pending.append((call, keys))
+    pending = [p[0] for p in pending]
     calls = pending
     return {
         **public(row),
@@ -398,6 +427,7 @@ def run_turn(db, job):
         "本轮 Skill 状态：" + dumps(skills) + "。"
         "学习、工作、运动与项目都可成为行动。纯聊天、求助、查询本身没有奖励。"
         "record_action 保存本条用户原话，propose_judgment 只建议净积分目标，后端回执才决定实际金额。"
+        "一份汇报含多个独立事项时，在 propose_judgment.items 中逐项给档位（依据 rules.tier_criteria，以时长与题量为信号），每项分值等于 positive_tiers 中的档位值；程序按事项求和，不接受档位外的数字。"
         "引用回执中的实际积分、规则与来源；未收到成功回执不说已到账、已扣除或已完成购买。"
         "未知事实、离线和工具失败不构成失败或罚分。扣分必须引用已启用 rule:id 或已接受 challenge:id。"
         "每条消息最多归入一个行动；补充同一行动沿其 ID 修订，不另奖。自述只标为自述。"
@@ -407,6 +437,7 @@ def run_turn(db, job):
         "没有返回内容不能声称读取成功；不建立站内学习资料、题库、复习计划或屏幕时间。"
         "用户只查询外部事实时不要 record_action 或 propose_judgment。"
         "普通任务可提议，但条件只有用户接受才生效。购买和出战建议要交给明确报价/阵容卡。"
+        "同一份条款每轮只提议一次；用户回复“好/可以”时不要再次调用 propose_challenge/propose_wager，条款卡会固定显示在输入框上方的“待确认条款”中，回复里一句话提示核对即可，不要整段复述条款。"
         "当前环境信息与真实状态：" + dumps(context)
     )
     messages = [{"role": "system", "content": system}] + [

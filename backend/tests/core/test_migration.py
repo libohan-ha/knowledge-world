@@ -27,7 +27,7 @@ def test_legacy_contract_checkin_assets_and_rules_survive_and_remain_fulfillable
         assert response.status_code == 200, response.text
         h = Harness(client, clock, app.state.db, before["owner"])
         with h.db.transaction(True, h.owner) as c:
-            assert c.scalar("SELECT version_num FROM alembic_version") == "0015"
+            assert c.scalar("SELECT version_num FROM alembic_version") == "0016"
             for original in before["ledger"]:
                 current = c.get("ledger_entries", original["id"])
                 assert {key: current[key] for key in original} == original

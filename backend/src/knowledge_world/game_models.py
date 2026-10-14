@@ -343,11 +343,32 @@ class ActionRevision(Expected):
     content: str = Field(min_length=1, max_length=20000)
 
 
-class SystemJudgment(Input):
+class JudgmentItem(Input):
+    """One independent item of a self-report. Positive points must equal its tier value."""
+    name: str = Field(min_length=1, max_length=200)
+    tier: Literal["small", "normal", "difficult", "breakthrough", "none", "penalty"]
     points: StrictInt = Field(ge=-10000, le=10000)
+    reason: str = Field(default="", max_length=2000)
+    basis: str = Field(default="action", max_length=200)
+
+
+class SystemJudgment(Input):
+    # With items, points is recomputed by the backend as the sum of item tiers;
+    # without items it is the legacy single-action target.
+    points: StrictInt = Field(default=0, ge=-10000, le=10000)
     reason: str = Field(min_length=1, max_length=4000)
     basis: str = Field(default="action", max_length=200)
     status: Literal["decided", "needs_review", "no_action"] = "decided"
+    items: list[JudgmentItem] = Field(default_factory=list, max_length=20)
+
+
+class DecisionItem(BaseModel):
+    name: str
+    tier: str
+    points: int
+    reason: str = ""
+    basis: str = "action"
+    approved_points: int | None = None
 
 
 class Decision(BaseModel):
@@ -365,6 +386,7 @@ class Decision(BaseModel):
     ledger_id: str | None
     rule_version: str
     model_info: dict[str, Any]
+    items: list[DecisionItem] = Field(default_factory=list)
     created_at: str
     applied_at: str | None
 
@@ -473,6 +495,11 @@ class PenaltyRuleCreate(Input):
     title: Name
     condition: str = Field(min_length=1, max_length=2000)
     points: StrictInt = Field(ge=0, le=100)
+
+
+class PenaltyConfession(Input):
+    client_key: str = Field(min_length=8, max_length=200)
+    note: str = Field(default="", max_length=2000)
 
 
 class SkillSetting(Input):
@@ -595,6 +622,8 @@ class ToolCard(BaseModel):
     result: dict[str, Any]
     state: str
     action_hash: str
+    run_id: str | None = None
+    created_at: str | None = None
 
 
 class AgentThread(BaseModel):
